@@ -7,7 +7,7 @@ import GlobalConfig from '@/models/GlobalConfig';
 export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.role || !['ADMIN', 'OWNER'].includes(session.user.role as string)) {
+    if (!(session?.user as any)?.role || !['ADMIN', 'OWNER'].includes((session?.user as any)?.role as string)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.role || !['ADMIN', 'OWNER'].includes(session.user.role as string)) {
+    if (!(session?.user as any)?.role || !['ADMIN', 'OWNER'].includes((session?.user as any)?.role as string)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 

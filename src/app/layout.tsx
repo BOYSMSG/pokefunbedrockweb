@@ -3,7 +3,7 @@ import './tailwind.css';
 import './globals.css';
 import Script from 'next/script';
 import { Providers } from '@/components/Providers';
-
+import { Analytics } from "@vercel/analytics/next";
 export const metadata: Metadata = {
   title: 'POKEDROCK SMP POKEFUN - Minecraft Bedrock Pokémon Server',
   description: 'Play the #1 Minecraft Bedrock Pokémon Server. Catch, train, and battle. Free to join!',
@@ -43,6 +43,7 @@ export default function RootLayout({
         <Script src="/js/tsparticles.preset.stars.bundle.min.js" strategy="lazyOnload" />
         <Script src="/js/sodo-search.min.js" strategy="lazyOnload" />
         <Script src="/js/cards.min.js" strategy="lazyOnload" />
+        <Analytics />
       </body>
     </html>
   );

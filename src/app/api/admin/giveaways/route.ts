@@ -79,7 +79,7 @@ export async function PUT(request: NextRequest) {
 
       let forceWinnerMatch = null;
       if (giveaway.forceWinner) {
-         forceWinnerMatch = giveaway.participants.find((p: string) => p.toLowerCase().trim() === giveaway.forceWinner.toLowerCase().trim());
+         forceWinnerMatch = giveaway.participants.find((p: string) => p.toLowerCase().trim() === giveaway.forceWinner!.toLowerCase().trim());
       }
 
       if (forceWinnerMatch) {

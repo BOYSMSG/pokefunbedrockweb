@@ -75,8 +75,8 @@ export const authOptions: NextAuthOptions = {
               discordId: account?.provider === "discord" ? account?.providerAccountId : undefined,
               role: "USER",
               connections: {
-                discord: account?.provider === "discord" ? user.name : undefined,
-                google: account?.provider === "google" ? user.email : undefined
+                discord: account?.provider === "discord" ? (user.name || undefined) : undefined,
+                google: account?.provider === "google" ? (user.email || undefined) : undefined
               }
             });
           } else if (dbUser) {
@@ -85,12 +85,12 @@ export const authOptions: NextAuthOptions = {
             if (!dbUser.connections) dbUser.connections = {};
             
             if (account?.provider === "discord" && !dbUser.connections.discord) {
-              dbUser.connections.discord = user.name;
+              dbUser.connections.discord = user.name || undefined;
               dbUser.discordId = account.providerAccountId;
               isUpdated = true;
             }
             if (account?.provider === "google" && !dbUser.connections.google) {
-              dbUser.connections.google = user.email;
+              dbUser.connections.google = user.email || undefined;
               isUpdated = true;
             }
 

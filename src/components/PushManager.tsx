@@ -181,7 +181,7 @@ export default function PushManager() {
               if (!badge) {
                 badge = document.createElement('span');
                 badge.className = 'unread-badge';
-                badge.style.cssText = 'position: absolute; top: -5px; right: -24px; background: red; color: white; border-radius: 12px; padding: 3px 7px; font-size: 0.75rem; font-weight: bold; line-height: 1; text-align: center; min-width: 18px; box-sizing: border-box;';
+                (badge as HTMLElement).style.cssText = 'position: absolute; top: -5px; right: -24px; background: red; color: white; border-radius: 12px; padding: 3px 7px; font-size: 0.75rem; font-weight: bold; line-height: 1; text-align: center; min-width: 18px; box-sizing: border-box;';
                 el.appendChild(badge);
               }
               badge.textContent = data.count > 9 ? '9+' : data.count.toString();

@@ -65,7 +65,6 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
     const savedCurrency = localStorage.getItem('pokefun_shop_currency');
     if (savedCurrency) {
       setCurrency(savedCurrency);
-      fetchCategoriesWithCurrency(savedCurrency);
     }
     
     // Fetch real recent payments
