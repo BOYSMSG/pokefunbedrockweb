@@ -1,0 +1,44 @@
+import mongoose, { Schema, Document, Model } from 'mongoose';
+
+export interface ITournament extends Document {
+  name: string;
+  description: string;
+  imageUrl?: string;
+  rules: string;
+  maxPlayers: number;
+  applicants: string[]; // Usernames who applied
+  approvedPlayers: string[]; // Usernames who were approved
+  createdBy: string;
+  createdAt: Date;
+  eventDate: Date;
+  status: 'UPCOMING' | 'ONGOING' | 'COMPLETED';
+  winners?: {
+    first?: string;
+    second?: string;
+    third?: string;
+  };
+}
+
+const TournamentSchema: Schema = new Schema({
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  imageUrl: { type: String },
+  rules: { type: String, default: '' },
+  maxPlayers: { type: Number, required: true, default: 32 },
+  applicants: [{ type: String }],
+  approvedPlayers: [{ type: String }],
+  createdBy: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+  eventDate: { type: Date, required: true },
+  status: { type: String, enum: ['UPCOMING', 'ONGOING', 'COMPLETED'], default: 'UPCOMING' },
+  winners: {
+    first: { type: String, default: '' },
+    second: { type: String, default: '' },
+    third: { type: String, default: '' }
+  },
+  endMessage: { type: String, default: '' }
+});
+
+const Tournament: Model<ITournament> = mongoose.models.Tournament || mongoose.model<ITournament>('Tournament', TournamentSchema);
+
+export default Tournament;
