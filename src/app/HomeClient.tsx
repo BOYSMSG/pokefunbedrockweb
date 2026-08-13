@@ -196,24 +196,24 @@ export default function HomeClient() {
                 </nav>
             </header>
             
-            <div className="p-body-inner">
-                <a href="#" id="players" className="info-card" style={{ position: 'relative', zIndex: 10 }}>
+            <div className="p-body-inner" style={{ width: '100%', boxSizing: 'border-box', padding: '0 20px', gap: '20px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <a href="#" id="players" className="info-card" style={{ position: 'relative', zIndex: 10, minWidth: '200px', justifyContent: 'flex-start' }}>
                     <i className="fa-solid fa-users"></i>
                     <div className="info-text">
                         <div className="if-large">Players <span className="count">{displayCount}</span></div>
                         <div className="if-small">mcpe.pokefun.in | Port: 19132</div>
                     </div>
                 </a>
-                <div id="logo" style={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
-                    <a href="/" style={{ display: 'inline-block' }}>
+                <div id="logo" style={{ flexGrow: 1, display: 'flex', justifyContent: 'center', minWidth: '300px' }}>
+                    <a href="/" style={{ display: 'inline-block', maxWidth: '100%' }}>
                         <img className="animate__infinite animate__slower animate__animated animate__pulse"
-                            src="/images/mainimage/title.png" style={{ width: "427px", maxWidth: "none", height: "auto", borderRadius: "12px" }} alt="Pokefun Logo" />
+                            src="/images/mainimage/title.png" style={{ width: "427px", maxWidth: "100%", height: "auto", borderRadius: "12px" }} alt="Pokefun Logo" />
                     </a>
                     <div className="circle">
                         <div className="circle"></div>
                     </div>
                 </div>
-                <a id="discord" target="_blank" href="https://discord.gg/9AU3kHZZDT" className="info-card" rel="noreferrer" style={{ position: 'relative', zIndex: 10 }}>
+                <a id="discord" target="_blank" href="https://discord.gg/9AU3kHZZDT" className="info-card" rel="noreferrer" style={{ position: 'relative', zIndex: 10, minWidth: '200px', justifyContent: 'flex-end' }}>
                     <div className="info-text">
                         <div className="if-large">DISCORD <span className="count">JOIN</span></div>
                         <div className="if-small">Join the Community</div>
