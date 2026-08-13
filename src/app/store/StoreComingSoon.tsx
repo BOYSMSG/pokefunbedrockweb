@@ -23,6 +23,7 @@ export default function StoreComingSoon() {
                     <a href="/features">Features</a>
                     <a href="/store" className="active-pill">Shop</a>
                     <a href="/showcase">Showcase</a>
+                    <a href="/team">Team</a>
                     <a href="https://discord.gg/9AU3kHZZDT" target="_blank" rel="noopener noreferrer">Discord</a>
                 </div>
             </div>
@@ -42,15 +43,16 @@ export default function StoreComingSoon() {
                             <li className="nav-features"><a href="/features">Features</a></li>
                             <li className="nav-shop nav-current"><a href="/store">Shop</a></li>
                             <li className="nav-showcase"><a href="/showcase">Showcase</a></li>
+                            <li className="nav-team"><a href="/team">Team</a></li>
                         </ul>
                     </div>
                 </nav>
             </header>
             
             <div className="p-body-inner" style={{ minHeight: '200px' }}>
-                <div id="logo">
-                    <a href="/">
-                        <img src="/images/mainimage/title.png" style={{ maxWidth: "875px", borderRadius: "12px" }} alt="Pokefun Logo" />
+                <div id="logo" style={{ display: 'flex', justifyContent: 'center', width: '100%', overflow: 'visible' }}>
+                    <a href="/" style={{ display: 'inline-block' }}>
+                        <img className="animate__infinite animate__slower animate__animated animate__pulse" src="/images/mainimage/title.png" style={{ width: "1125px", maxWidth: "none", height: "auto", borderRadius: "12px", display: "block" }} alt="Pokefun Logo" />
                     </a>
                 </div>
             </div>

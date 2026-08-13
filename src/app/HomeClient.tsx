@@ -170,6 +170,7 @@ export default function HomeClient() {
                     <a href="/features">Features</a>
                     <a href="/store">Shop</a>
                     <a href="/showcase">Showcase</a>
+                    <a href="/team">Team</a>
                     <a href="https://discord.gg/9AU3kHZZDT" target="_blank" rel="noopener noreferrer">Discord</a>
                 </div>
             </div>
@@ -189,29 +190,30 @@ export default function HomeClient() {
                             <li className="nav-features"><a href="/features">Features</a></li>
                             <li className="nav-shop"><a href="/store">Shop</a></li>
                             <li className="nav-showcase"><a href="/showcase">Showcase</a></li>
+                            <li className="nav-team"><a href="/team">Team</a></li>
                         </ul>
                     </div>
                 </nav>
             </header>
             
             <div className="p-body-inner">
-                <a href="#" id="players" className="info-card">
+                <a href="#" id="players" className="info-card" style={{ position: 'relative', zIndex: 10 }}>
                     <i className="fa-solid fa-users"></i>
                     <div className="info-text">
                         <div className="if-large">Players <span className="count">{displayCount}</span></div>
                         <div className="if-small">mcpe.pokefun.in | Port: 19132</div>
                     </div>
                 </a>
-                <div id="logo">
-                    <a href="/">
+                <div id="logo" style={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+                    <a href="/" style={{ display: 'inline-block' }}>
                         <img className="animate__infinite animate__slower animate__animated animate__pulse"
-                            src="/images/mainimage/title.png" style={{ maxWidth: "450px", borderRadius: "12px", transform: "translateX(-10%)" }} alt="Pokefun Logo" />
+                            src="/images/mainimage/title.png" style={{ width: "427px", maxWidth: "none", height: "auto", borderRadius: "12px" }} alt="Pokefun Logo" />
                     </a>
                     <div className="circle">
                         <div className="circle"></div>
                     </div>
                 </div>
-                <a id="discord" target="_blank" href="https://discord.gg/9AU3kHZZDT" className="info-card" rel="noreferrer">
+                <a id="discord" target="_blank" href="https://discord.gg/9AU3kHZZDT" className="info-card" rel="noreferrer" style={{ position: 'relative', zIndex: 10 }}>
                     <div className="info-text">
                         <div className="if-large">DISCORD <span className="count">JOIN</span></div>
                         <div className="if-small">Join the Community</div>
@@ -342,8 +344,8 @@ export default function HomeClient() {
                                    alignItems: 'center',
                                    gap: '30px'
                                }}>
-                                   <div style={{ flex: '1 1 45%', minWidth: '300px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s' }}>
-                                       <img src={feature.image} style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }} alt="Server Feature" />
+                                   <div style={{ flex: '1 1 45%', minWidth: '300px', borderRadius: '16px', overflow: 'hidden', transition: 'transform 0.3s', display: 'flex', justifyContent: 'center' }} className="hover:scale-105">
+                                       <img src={feature.image} style={{ width: '100%', height: '250px', display: 'block', objectFit: 'contain', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.1))' }} alt="Server Feature" />
                                    </div>
                                    <div style={{ flex: '1 1 45%', minWidth: '300px', padding: '20px' }}>
                                        <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '15px', color: '#0ea5e9' }}>
@@ -355,7 +357,6 @@ export default function HomeClient() {
                                    </div>
                                </div>
                            ))}
-                        </div>
                         </div>
                     </div>
 

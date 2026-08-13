@@ -1,128 +1,130 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Script from "next/script";
 
-const features = [
+const newFeatures = [
     {
-      title: "Natural Bosses",
-      desc: "Powerful bosses spawn naturally in the world! Defeat them for epic loot.",
-      image: "/images/features/image09_bosspokemons1.png",
+      title: "Real Gyms & Badges",
+      desc: "Step up to the ultimate challenge! Test your skills against real Gym Leaders spread across the world. Build the perfect team, exploit type advantages, and claim victory to collect exclusive Gym Badges that prove your strength to everyone on the server.",
+      image: "/images/features/realgysmandbages1.png"
     },
     {
-      title: "Custom Raids",
-      desc: "Team up with friends in the new Raid System to battle legendary foes.",
-      image: "/images/features/image27_Team_Raids_Battle.png",
+      title: "Fun & Casino Games",
+      desc: "Need a break from training? Head over to our vibrant Casino to try your luck with exciting mini-games! Bet your Pokécoins, interact with our interactive NPC dealers, and win massive payouts or rare prizes if you hit the jackpot.",
+      image: "/images/features/funandcasiongames.png"
     },
     {
-      title: "Battle Gimmicks",
-      desc: "Mega Evolution, Dynamax, Gigantamax, and Z-Moves are all fully active!",
-      image: "/images/features/image29_Z_Mega1s.png",
+      title: "Server Crates",
+      desc: "Unlock incredible rewards with our custom server crates! Participate in events, vote for the server, or conquer dungeons to earn Crate Keys. Spin to win legendary items, rare shiny Pokémon, and exclusive cosmetics that will make you stand out.",
+      image: "/images/features/crates.png"
     },
     {
-      title: "Pokémon Fusion",
-      desc: "Create unique and powerful Pokémon through our advanced fusion system.",
-      image: "/images/features/fusion pokemons1.png",
+      title: "Leaderboards",
+      desc: "Do you have what it takes to be the very best? Compete with other players across various categories and show off your skills. Climb to the top of the global leaderboards to earn special titles, respect from the community, and exclusive seasonal rewards!",
+      image: "/images/features/leaderboards.png"
     },
     {
-      title: "Gym System",
-      desc: "Challenge our custom gyms and prove you are the best trainer.",
-      image: "/images/features/battletower.png",
+      title: "Server Menu & Essentials",
+      desc: "Access the intuitive server menu for essential features! Manage your Warps, Claims, Bounties, Jobs, and Bank. Plus, easily check your Stats, redeem Codes, run Commands, visit the Pokéfun Shop, and manage your Homes.",
+      images: [
+        "/images/features/servermenuessntialsandotherfeturs1.png", 
+        "/images/features/servermenuessntialsandotherfeturs2.png"
+      ]
     },
     {
-      title: "Cosmetic Skins",
-      desc: "Unlock hundreds of unique skins and cosmetics for your favorite Pokémon.",
-      image: "/images/features/cosmetic skins1.png",
+      title: "Special Machines",
+      desc: "Take your gameplay to the next level by utilizing our variety of special custom machines. Craft powerful unique items, automate your resource gathering, and train your Pokémon's abilities faster than ever before with state-of-the-art tech!",
+      image: "/images/features/specialmachines.png"
     },
     {
-      title: "Player Economy",
-      desc: "Trade with players, set up shops, and participate in a living GTS economy.",
-      image: "/images/features/hugecity2.png",
+      title: "Trading & TM Machine",
+      desc: "Engage in a robust player economy! Trade Pokémon safely with other trainers using our secure trade menus to complete your Pokédex. Additionally, use specialized TM Machines to teach your Pokémon powerful new moves to optimize them for competitive battles.",
+      image: "/images/features/tradingandtmmachine.png"
     },
     {
-      title: "Legendary Monuments",
-      desc: "Explore hidden structures containing rare treasures and secrets.",
-      image: "/images/features/cool spawn-2.png",
+      title: "Custom Bagpacks",
+      desc: "Running out of inventory space? We've got you covered! Expand your carrying capacity instantly with our functional, custom backpacks. Equip them to your chestplate slot to carry all your adventure essentials while still gaining armor protection.",
+      image: "/images/features/bagpacks.png"
     },
     {
-      title: "Distortion World",
-      desc: "Explore the twisted and inverted Distortion World!",
-      image: "/images/features/DISTORTION WORLD1.png",
+      title: "The Pokémon Center & Village",
+      desc: "The Pokémon center will be the most important structure of your adventure. It appear in the plains and the desert, there you will find everything you need to improve your gaming experience.",
+      image: "/images/features/thepokecenterandvillage.png",
     },
     {
-      title: "Flying Taxi",
-      desc: "Travel quickly across the region using the Flying Taxi service.",
-      image: "/images/features/Flying Taxi-Photoroom.png",
+      title: "Battle System Improvements",
+      desc: "The battle system has many improvements, it is the same as the original games. It has mega evolutions, Dynamax and its own mechanic called \"boost\" that consumes experience to raise all stats by 3 turns!",
+      image: "/images/features/thebattlesystem.jpg",
     },
     {
-      title: "Gigantamax Forms",
-      desc: "Discover and battle incredible Gigantamax Pokemon.",
-      image: "/images/features/Gmax forms-1.png",
+      title: "Start a Battle Anywhere",
+      desc: "You can start a battle throwing your Pokémon (crouching and opening your menu) to a wild Pokémon or approaching a trainer.",
+      images: ["/images/features/youcanstartbattle1.gif", "/images/features/youcanstartbattle2.gif"],
     },
     {
-      title: "Battle Royals & Alpha Zone",
-      desc: "Compete in chaotic Battle Royals in the dangerous Alpha Zone.",
-      image: "/images/features/battleroyalsalphzone.png",
+      title: "Basic Interactions",
+      desc: "You can use your Pokédex to test your Pokémon's mount and evolutions. Some Pokémon evolve by item interaction or trading. ALL evolution methods are in the Pokédex, so check it regularly.",
+      image: "/images/features/basicintraction.png",
     },
     {
-      title: "Battle Tower",
-      desc: "Test your skills in the Battle Tower and earn rare rewards.",
-      image: "/images/features/battletower.png",
+      title: "Grazing Functions",
+      desc: "The PC now has a new button that lets you send your Pokémon out to roam around. With this function, your Pokémon will heal a little HP, increase their friendship, and attack nearby monsters! Look for the new \"pasture\" PC box and choose an action between returning it to the party or the PC.",
+      image: "/images/features/pcfeture.gif",
     },
     {
-      title: "Cool Fakemons",
-      desc: "Hundreds of unique Fakemons to catch and train.",
-      image: "/images/features/coolfakemons.png",
+      title: "Pokéradar & Biome Detector",
+      desc: "The Pokéradar is a new feature that lets you search for Pokémon near you. In addition, the Pokédex now includes a biome detector to help you find specific Pokémon.",
+      image: "/images/features/pokeradar.png",
     },
     {
-      title: "Custom Forms",
-      desc: "Discover unique regional forms of your favorite Pokemon.",
-      image: "/images/features/customeforms.png",
+      title: "Berries & Apricorns",
+      desc: "Berry plants will appear in Pokévillages. You can plant new berries with their seeds, there are some recipes you can make with them! Apricorn plants will appear over the world. With its fruit you can create some Pokéballs!",
+      image: "/images/features/berrys.png",
     },
     {
-      title: "Dungeons",
-      desc: "Explore challenging dungeons for legendary loot.",
-      image: "/images/features/dungeon.png",
+      title: "Mining Ores",
+      desc: "When mining you will find some ores that will contain evo stones, mega stones, key stones or wishing stars. It will help you progress in your adventure and get improvements.",
+      image: "/images/features/ores.jpeg",
     },
     {
-      title: "Huge Cities",
-      desc: "Explore massive cities full of NPCs and quests.",
-      image: "/images/features/hugecity.png",
+      title: "Bike and Ride Pager",
+      desc: "Now the Bike and the Ride pager can be obtained in the Game corner. It will serve as transport to reach more difficult or high places, also to explore more easily.",
+      image: "/images/features/bikeandridepagger.jpeg",
     },
     {
-      title: "Epic Armours",
-      desc: "Equip your character with epic custom armor sets.",
-      image: "/images/features/image15_epicarmours.png",
+      title: "Backpacks & Painting",
+      desc: "Now you can use backpacks! They function as a Bundle, but you can wear them in the chestplate slot and it give you armor. You can also paint your Pokédex and Backpack!",
+      image: "/images/features/paintcolor.jpg",
     },
     {
-      title: "Poke Costumes",
-      desc: "Dress up your Pokemon with special costumes.",
-      image: "/images/features/image22_pokecostume.png",
+      title: "GachaMon Machine",
+      desc: "GachaMon machine allowing players to obtain items, Mega Stones, and even random Pokémon through capsule-based rewards with different rarity tiers.",
+      image: "/images/features/gachamon.png",
     },
     {
-      title: "Primal Forms",
-      desc: "Unleash the ancient power of Primal Reversion.",
-      image: "/images/features/image26_primal_forms.png",
+      title: "Advanced Breeding System",
+      desc: "A new breeding system has been created. With the new Day Care machine, you can store up to 6 Pokémon to breed. You can also add up to 2 other people to bring their Pokémon and create the perfect Pokémon. (To open the menu, you must have the Pokedex in your hand and press the action button.)",
+      image: "/images/features/daycarebreeding.jpg",
     },
     {
-      title: "Minigames & Tasks",
-      desc: "Complete daily tasks and play fun minigames.",
-      image: "/images/features/minigamstasks-.png",
+      title: "More Equipables",
+      desc: "Eight new equippable items have been added to Pokémon, along with the Shiny Charm (which increases the chance of encountering Shiny Pokémon both in the Day Care and in the wild when held in your inventory). These items will help train Pokémon's EVs more efficiently (in the Day Care, they will pass on a specific IV from the parent holding the item, and the Everstone will pass on the Pokémon's Nature). The Everstone will prevent the Pokémon from evolving, which is for those who like their Pokémon just as it is.",
+      image: "/images/features/moreecupmanets.png",
     },
     {
-      title: "Ranked Matches",
-      desc: "Climb the ladder in competitive Ranked Matches.",
-      image: "/images/features/rankedmacthcs.png",
+      title: "Kitchen & Food",
+      desc: "🍳 Kitchen & Food\n🎨 Edible dyes in 16 colors\n(Colors and designs adapted for best viewing with SERP Reworked)",
+      image: "/images/features/kichenandfood.png",
     },
     {
-      title: "Safari Zone",
-      desc: "Catch rare Pokemon in the Safari Zone.",
-      image: "/images/features/safarizone.png",
+      title: "Epic Builds",
+      desc: "Open showcase for more builds viewers",
+      image: "/images/features/epicbuidls.png"
     },
     {
-      title: "Team Battles",
-      desc: "Form a team and battle other players.",
-      image: "/images/features/teambattles.png",
+      title: "More Coming Soon!",
+      desc: "Many other features coming soon and under development: Raids, Dungeons, NPCs, Level Cap, and many more coming soon!",
+      image: ""
     }
 ];
 
@@ -146,6 +148,7 @@ export default function FeaturesPage() {
                     <a href="/features" className="active-pill">Features</a>
                     <a href="/store">Shop</a>
                     <a href="/showcase">Showcase</a>
+                    <a href="/team">Team</a>
                     <a href="https://discord.gg/9AU3kHZZDT" target="_blank" rel="noopener noreferrer">Discord</a>
                 </div>
             </div>
@@ -165,60 +168,75 @@ export default function FeaturesPage() {
                             <li className="nav-features nav-current"><a href="/features">Features</a></li>
                             <li className="nav-shop"><a href="/store">Shop</a></li>
                             <li className="nav-showcase"><a href="/showcase">Showcase</a></li>
+                            <li className="nav-team"><a href="/team">Team</a></li>
                         </ul>
                     </div>
                 </nav>
             </header>
             
             <div className="p-body-inner" style={{ minHeight: '200px' }}>
-                <div id="logo">
-                    <a href="/">
-                        <img src="/images/mainimage/title.png" style={{ maxWidth: "875px", borderRadius: "12px" }} alt="Pokefun Logo" />
+                <div id="logo" style={{ display: 'flex', justifyContent: 'center', width: '100%', overflow: 'visible' }}>
+                    <a href="/" style={{ display: 'inline-block' }}>
+                        <img className="animate__infinite animate__slower animate__animated animate__pulse" src="/images/mainimage/title.png" style={{ width: "1125px", maxWidth: "none", height: "auto", borderRadius: "12px", display: "block" }} alt="Pokefun Logo" />
                     </a>
                 </div>
             </div>
         </div>
 
-        <main id="site-main" className="site-main outer">
-            <div className="inner posts" style={{ paddingTop: '60px', paddingBottom: '80px' }}>
-                <div className="section-title" style={{ textAlign: 'center', marginBottom: '20px', fontSize: '36px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px', color: '#111' }}>
-                    Server Features
-                </div>
-                <p style={{ textAlign: 'center', color: '#666', fontSize: '18px', marginBottom: '60px', maxWidth: '800px', margin: '0 auto 60px' }}>
-                    Discover the unique mechanics, minigames, and systems that make Pokefun the ultimate Bedrock destination.
-                </p>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '40px', maxWidth: '1200px', margin: '0 auto' }}>
-                    {features.map((feature, idx) => (
-                        <div key={idx} className="feature-card" style={{ 
-                            borderRadius: '16px', 
-                            overflow: 'hidden', 
-                            background: '#fff', 
-                            boxShadow: '0 10px 30px rgba(0,0,0,0.1)', 
-                            display: 'flex', 
-                            flexDirection: 'column',
-                            transition: 'all 0.3s ease'
-                        }}>
-                            <div style={{ height: '220px', overflow: 'hidden' }}>
-                                <img 
-                                    src={feature.image} 
-                                    alt={feature.title} 
-                                    className="feature-img"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }} 
-                                />
-                            </div>
-                            <div style={{ padding: '30px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                                <h3 style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '15px', color: '#0ea5e9' }}>
-                                    {feature.title}
-                                </h3>
-                                <p style={{ color: '#555', lineHeight: '1.6', fontSize: '15px' }}>
-                                    {feature.desc}
-                                </p>
-                            </div>
+        <main>
+            <main id="site-main" className="site-main outer">
+                <div className="inner posts">
+                    <div className="inner" style={{ marginTop: '40px', marginBottom: '60px' }}>
+                        <div className="section-title"
+                            style={{ textAlign: 'center', marginBottom: '60px', fontSize: '36px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px', color: '#0ea5e9' }}>
+                            Server Features
                         </div>
-                    ))}
+                        
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '60px', margin: '0 auto', maxWidth: '1000px', padding: '0 20px' }}>
+                           {newFeatures.map((feature, i) => {
+                               // Alternate layout: Even = Text Left, Image Right. Odd = Image Left, Text Right.
+                               const isImageLeft = i % 2 !== 0;
+                               
+                               return (
+                                   <div key={i} style={{ 
+                                       display: 'flex', 
+                                       flexDirection: isImageLeft ? 'row-reverse' : 'row', 
+                                       flexWrap: 'wrap',
+                                       alignItems: 'center',
+                                       gap: '40px'
+                                   }}>
+                                       <div style={{ flex: '1 1 45%', minWidth: '300px' }}>
+                                           <h3 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '15px', color: '#0ea5e9' }}>
+                                               {feature.title}
+                                           </h3>
+                                           <p style={{ fontSize: '18px', lineHeight: '1.6', color: '#555', whiteSpace: 'pre-wrap' }}>
+                                               {feature.desc}
+                                           </p>
+                                       </div>
+                                       
+                                       {(feature.image || feature.images) && (
+                                           <div style={{ flex: '1 1 45%', minWidth: '300px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 15px 35px rgba(0,0,0,0.15)', transition: 'transform 0.3s' }} className="hover:scale-105">
+                                               {feature.images ? (
+                                                   <div style={{ display: 'flex', flexDirection: 'row', gap: '10px', justifyContent: 'center' }}>
+                                                       {feature.images.map((img, idx) => (
+                                                           <img key={idx} src={img} style={{ width: 'calc(50% - 5px)', height: 'auto', display: 'block', objectFit: 'contain', borderRadius: '8px' }} alt={`${feature.title} ${idx+1}`} />
+                                                       ))}
+                                                   </div>
+                                               ) : (
+                                                  <img src={feature.image} style={{ width: '100%', height: '300px', display: 'block', objectFit: 'contain', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.1))' }} alt={feature.title} />
+                                               )}
+                                           </div>
+                                        )}
+                                   </div>
+                               );
+                           })}
+                        </div>
+
+
+
+                    </div>
                 </div>
-            </div>
+            </main>
         </main>
         
         <section id="footer">
@@ -234,16 +252,6 @@ export default function FeaturesPage() {
                 </div>
             </div>
         </section>
-
-        <style dangerouslySetInnerHTML={{__html: `
-            .feature-card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
-            }
-            .feature-card:hover .feature-img {
-                transform: scale(1.08) !important;
-            }
-        `}} />
     </div>
   );
 }
