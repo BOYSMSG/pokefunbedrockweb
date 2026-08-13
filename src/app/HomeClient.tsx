@@ -356,6 +356,64 @@ export default function HomeClient() {
                                </div>
                            ))}
                         </div>
+                        </div>
+                    </div>
+
+                    <div className="inner" style={{ marginTop: '80px', marginBottom: '80px' }}>
+                        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                            <h2 style={{ 
+                                fontSize: '48px', 
+                                fontWeight: '900', 
+                                color: '#0ea5e9',
+                                textShadow: '2px 2px 0px #ff0000, -2px -2px 0px #ff0000, 2px -2px 0px #ff0000, -2px 2px 0px #ff0000, 0px 3px 0px #ff0000',
+                                letterSpacing: '2px',
+                                fontStyle: 'italic',
+                                marginBottom: '10px'
+                            }}>
+                                #pokedrocksmp
+                            </h2>
+                            <p style={{ color: '#555', fontSize: '16px' }}>
+                                Check out some amazing content posted for Pokedrocksmp. <a href="https://discord.gg/9nS6krJ3Ne" target="_blank" rel="noreferrer" style={{ color: '#0ea5e9', textDecoration: 'underline' }}>Contact for add yours</a>
+                            </p>
+                        </div>
+                        
+                        <div style={{ 
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            gap: '20px', 
+                            maxWidth: '1200px', 
+                            margin: '0 auto', 
+                            padding: '0 20px',
+                            justifyContent: 'center'
+                        }}>
+                            {[
+                                "4zrcSG2ygw0", "h1FQs-IiVr0", "0ptMHOkhJ4Q", "__ziTdEXDl4", "Qq_V_vSGLDM", 
+                                "G8QyBWAIeYk", "Tzi1FsPWC5s", "lseql_tGWDs", "0DkrJkyW9CA", "hPoQH9xsCJ0", "aAE52hLQOTQ"
+                            ].map((vid, idx) => {
+                                // First two videos are larger (calc(50% - 10px))
+                                // Remaining videos are smaller (calc(33.333% - 14px))
+                                // On mobile, they should just be 100% wide. Using minWidth to achieve some flex responsiveness.
+                                const isLarge = idx < 2;
+                                return (
+                                    <div key={vid} style={{ 
+                                        flex: isLarge ? '1 1 calc(50% - 20px)' : '1 1 calc(33.333% - 20px)',
+                                        minWidth: isLarge ? '300px' : '250px',
+                                        position: 'relative',
+                                        borderRadius: '12px',
+                                        overflow: 'hidden',
+                                        boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+                                        aspectRatio: '16 / 9'
+                                    }}>
+                                        <iframe 
+                                            src={`https://www.youtube.com/embed/${vid}?rel=0`} 
+                                            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen>
+                                        </iframe>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
 
                 </div>
