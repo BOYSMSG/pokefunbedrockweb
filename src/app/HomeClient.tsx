@@ -197,9 +197,9 @@ export default function HomeClient() {
             </header>
             
             <div className="p-body-inner" style={{ width: '100%', boxSizing: 'border-box', padding: '0 20px', gap: '20px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                <a href="#" id="players" className="info-card" style={{ position: 'relative', zIndex: 10, minWidth: '200px', justifyContent: 'flex-start' }}>
-                    <i className="fa-solid fa-users"></i>
-                    <div className="info-text">
+                <a href="#" id="players" className="info-card" style={{ position: 'relative', zIndex: 10, minWidth: '200px', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                    <i className="fa-solid fa-users" style={{ fontSize: '32px', order: -5, margin: 0 }}></i>
+                    <div className="info-text" style={{ textAlign: 'center' }}>
                         <div className="if-large">Players <span className="count">{displayCount}</span></div>
                         <div className="if-small">mcpe.pokefun.in | Port: 19132</div>
                     </div>
@@ -213,12 +213,12 @@ export default function HomeClient() {
                         <div className="circle"></div>
                     </div>
                 </div>
-                <a id="discord" target="_blank" href="https://discord.gg/9AU3kHZZDT" className="info-card" rel="noreferrer" style={{ position: 'relative', zIndex: 10, minWidth: '200px', justifyContent: 'flex-end' }}>
-                    <div className="info-text">
+                <a id="discord" target="_blank" href="https://discord.gg/9AU3kHZZDT" className="info-card" rel="noreferrer" style={{ position: 'relative', zIndex: 10, minWidth: '200px', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                    <i className="fa-brands fa-discord" style={{ fontSize: '32px', order: -5, margin: 0 }}></i>
+                    <div className="info-text" style={{ textAlign: 'center' }}>
                         <div className="if-large">DISCORD <span className="count">JOIN</span></div>
                         <div className="if-small">Join the Community</div>
                     </div>
-                    <i className="fa-brands fa-discord"></i>
                 </a>
             </div>
             <div className="custom-shape-divider-bottom-1675067978 custom-shadow">
