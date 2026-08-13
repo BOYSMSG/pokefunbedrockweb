@@ -264,8 +264,17 @@ export default function HomeClient() {
 
                     <div className="inner" style={{ marginTop: '40px', marginBottom: '60px' }}>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '40px', margin: '0 auto', maxWidth: '1000px', padding: '0 20px', alignItems: 'center' }}>
-                            <div style={{ flex: '1 1 45%', minWidth: '300px' }}>
+                            <div style={{ flex: '1 1 45%', minWidth: '300px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                                 <img src="/images/mainimage/server_add_name_ip.png" alt="How to join" style={{ width: '100%', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.15)' }} />
+                                
+                                <div style={{ background: '#fff', borderRadius: '16px', padding: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', textAlign: 'center', border: '1px solid #eee' }}>
+                                    <h4 style={{ fontSize: '20px', fontWeight: 'bold', color: '#0ea5e9', marginBottom: '10px' }}>Console Support Available!</h4>
+                                    <p style={{ color: '#555', fontSize: '15px', marginBottom: '15px', lineHeight: '1.6' }}>
+                                        Play seamlessly on Nintendo Switch, PlayStation, and Xbox! Just go to your Friends tab, add the gamertag <strong>BOYSMSG</strong> as a friend, and join our world!
+                                    </p>
+                                    <img src="/images/mainimage/add_friend_boysmsg.png" alt="Add Gamertag as friend" style={{ width: '100%', borderRadius: '8px', marginBottom: '15px', border: '1px solid #ddd' }} />
+                                    <img src="/images/mainimage/consoles_support.png" alt="Supported on Switch, PlayStation, and Xbox" style={{ width: '100%', maxWidth: '280px', height: 'auto', margin: '0 auto', display: 'block' }} />
+                                </div>
                             </div>
                             <div style={{ flex: '1 1 45%', minWidth: '300px' }}>
                                 <div className="section-title" style={{ marginBottom: '20px', fontSize: '28px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: '#333' }}>
