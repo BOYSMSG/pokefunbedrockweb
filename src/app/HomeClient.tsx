@@ -117,12 +117,12 @@ export default function HomeClient() {
 
   useEffect(() => {
     // Fetch server status
-    fetch("https://mcapi.us/server/status?ip=mcpe.pokefun.in&port=19132")
+    fetch("https://api.mcstatus.io/v2/status/bedrock/mcpe.pokefun.in:19132")
       .then((res) => res.json())
       .then((data) => {
-        if (data.status === "success" && data.online) {
+        if (data.online) {
           // Add 20 to the actual player count as requested
-          setPlayerCount((data.players?.now || 0) + 20);
+          setPlayerCount((data.players?.online || 0) + 20);
         } else {
           setPlayerCount("Maintenance");
           setDisplayCount("Maintenance");
