@@ -182,7 +182,7 @@ export default function ShowcasePage() {
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '30px', margin: '0 auto', maxWidth: '1200px', padding: '0 20px' }}>
                            {showcaseImages.map((img, i) => (
                                <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: '0 15px 35px rgba(0,0,0,0.2)', transition: 'transform 0.3s' }} className="hover:scale-105">
-                                   <img src={`/images/showcaseimage/${img}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', aspectRatio: '16/9' }} alt="Showcase" />
+                                   <img src={`/images/showcase/${img}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', aspectRatio: '16/9' }} alt="Showcase" />
                                </div>
                            ))}
                         </div>
