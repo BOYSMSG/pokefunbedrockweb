@@ -237,7 +237,7 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
                     <a href="/features">Features</a>
                     <a href="/store" className="active-pill">Shop</a>
                     <a href="/showcase">Showcase</a>
-                    <a href="https://discord.gg/9nS6krJ3Ne" target="_blank" rel="noopener noreferrer">Discord</a>
+                    <a href="https://discord.gg/9AU3kHZZDT" target="_blank" rel="noopener noreferrer">Discord</a>
                 </div>
             </div>
             <div className="header-bg" style={{ height: '350px' }}></div>
