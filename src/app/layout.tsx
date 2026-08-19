@@ -37,7 +37,7 @@ export default function RootLayout({
         </Providers>
         
         {/* Scripts from the theme */}
-        <Script src="/js/jquery-3.5.1.min.js" strategy="beforeInteractive" />
+        <Script src="/js/jquery-3.5.1.min.js" strategy="afterInteractive" />
         <Script src="/js/jquery-ui.js" strategy="lazyOnload" />
         <Script src="/js/casper.js" strategy="lazyOnload" />
         <Script src="/js/tsparticles.preset.stars.bundle.min.js" strategy="lazyOnload" />

@@ -19,6 +19,33 @@ const newFeatures = [
       image: "/images/features/crates.png"
     },
     {
+      title: "Global Trade System (GTS)",
+      desc: "Trade your Pokémon and items with players across the entire server! List your Pokémon for a specific price or search for that rare shiny you've been looking for. The GTS makes economy and trading safe and easy.",
+      image: "/images/features/gts.png"
+    },
+    {
+      title: "Protection Stones (Land Claim)",
+      desc: (
+        <>
+          Keep your builds and items safe! Use Protection Stones to claim land and protect your base from griefing or theft. You can manage who has access to your protected areas, so you can build safely with your friends.
+          <br /><br />
+          You can buy them from our <a href="/store" style={{ color: '#0ea5e9', textDecoration: 'underline', fontWeight: 'bold' }}>Paid Store</a> or with in-game currency for different radius protection stones on your demand. You also get them in your Starter Kit and Paid Rank Kits!
+        </>
+      ),
+      image: "/images/features/landprotectionstones_landclaim.png"
+    },
+    {
+      title: "Server Ranks & Support",
+      desc: (
+        <>
+          Support the server and get amazing perks! Purchase Ranks to unlock exclusive kits, unique commands, custom titles, and other special benefits. Your support helps keep the server running and growing!
+          <br /><br />
+          You can buy them from our <a href="/store" style={{ color: '#0ea5e9', textDecoration: 'underline', fontWeight: 'bold' }}>Store</a>!
+        </>
+      ),
+      image: "/images/features/ranks_buy_ranks_and_supportserver.png"
+    },
+    {
       title: "Leaderboards",
       desc: "Do you have what it takes to be the very best? Compete with other players across various categories and show off your skills. Climb to the top of the global leaderboards to earn special titles, respect from the community, and exclusive seasonal rewards!",
       image: "/images/features/leaderboards.png"
@@ -128,69 +155,20 @@ const newFeatures = [
     }
 ];
 
+import SiteHeader from "@/components/SiteHeader";
+
 export default function FeaturesPage() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.classList.add("gh-head-open");
-    } else {
-      document.body.classList.remove("gh-head-open");
-    }
-  }, [menuOpen]);
-
   return (
     <div className="viewport">
-        <div id="gh-header">
-            <div id="nav">
-                <div className="container">
-                    <a href="/">Home</a>
-                    <a href="/features" className="active-pill">Features</a>
-                    <a href="/store">Shop</a>
-                    <a href="/showcase">Showcase</a>
-                    <a href="/team">Team</a>
-                    <a href="https://discord.gg/9AU3kHZZDT" target="_blank" rel="noopener noreferrer">Discord</a>
-                </div>
-            </div>
-            <div className="header-bg" style={{ height: '350px' }}></div>
-            <header id="gh-head" className="gh-head has-cover">
-                <nav className="gh-head-inner inner gh-container">
-                    <div className="gh-head-brand hidden-desktop">
-                        <a className="gh-burger" role="button" onClick={() => setMenuOpen(!menuOpen)}>
-                            <div className="gh-burger-box">
-                                <div className="gh-burger-inner"></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div className="gh-head-menu">
-                        <ul className="nav">
-                            <li className="nav-home"><a href="/">Home</a></li>
-                            <li className="nav-features nav-current"><a href="/features">Features</a></li>
-                            <li className="nav-shop"><a href="/store">Shop</a></li>
-                            <li className="nav-showcase"><a href="/showcase">Showcase</a></li>
-                            <li className="nav-team"><a href="/team">Team</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-            
-            <div className="p-body-inner" style={{ minHeight: '200px' }}>
-                <div id="logo" style={{ display: 'flex', justifyContent: 'center', width: '100%', overflow: 'visible' }}>
-                    <a href="/" style={{ display: 'inline-block' }}>
-                        <img className="animate__infinite animate__slower animate__animated animate__pulse" src="/images/mainimage/title.png" style={{ width: "1125px", maxWidth: "none", height: "auto", borderRadius: "12px", display: "block" }} alt="Pokefun Logo" />
-                    </a>
-                </div>
-            </div>
-        </div>
+        <SiteHeader />
 
-        <main>
-            <main id="site-main" className="site-main outer">
-                <div className="inner posts">
-                    <div className="inner" style={{ marginTop: '40px', marginBottom: '60px' }}>
-                        <div className="section-title"
-                            style={{ textAlign: 'center', marginBottom: '60px', fontSize: '36px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px', color: '#0ea5e9' }}>
-                            Server Features
-                        </div>
+        <main id="site-main" className="site-main outer" style={{ background: '#f8fafc', margin: 0, padding: 0 }}>
+            <div className="inner posts" style={{ width: '100%', maxWidth: 'none', padding: 0 }}>
+                <div className="inner" style={{ marginTop: '40px', marginBottom: '60px', padding: '0 20px' }}>
+                    <div className="section-title"
+                        style={{ textAlign: 'center', marginBottom: '60px', fontSize: '36px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px', color: '#0ea5e9' }}>
+                        Server Features
+                    </div>
                         
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '60px', margin: '0 auto', maxWidth: '1000px', padding: '0 20px' }}>
                            {newFeatures.map((feature, i) => {
@@ -237,7 +215,6 @@ export default function FeaturesPage() {
                     </div>
                 </div>
             </main>
-        </main>
         
         <section id="footer">
             <div className="inner" style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", justifyContent: "space-between", padding: "0 20px" }}>

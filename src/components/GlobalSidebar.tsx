@@ -25,6 +25,7 @@ export default function GlobalSidebar() {
     { title: "Vote", path: "/vote" },
     { title: "Rewards", path: "/rewards" },
     { title: "Store", path: "https://store.pokefun.in" },
+    { title: "FAQ & Issues", path: "/wiki/faq" },
   ];
 
   const infoLinks = [

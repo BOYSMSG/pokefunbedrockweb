@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import SiteHeader from "@/components/SiteHeader";
 import SaleBanner from '@/components/SaleBanner';
 import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
@@ -230,55 +231,62 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
 
   return (
     <div className="viewport">
-        <div id="gh-header">
-            <div id="nav">
-                <div className="container">
-                    <a href="/">Home</a>
-                    <a href="/features">Features</a>
-                    <a href="/store" className="active-pill">Shop</a>
-                    <a href="/showcase">Showcase</a>
-                    <a href="https://discord.gg/9AU3kHZZDT" target="_blank" rel="noopener noreferrer">Discord</a>
-                </div>
-            </div>
-            <div className="header-bg" style={{ height: '350px' }}></div>
-            <header id="gh-head" className="gh-head has-cover">
-                <nav className="gh-head-inner inner gh-container">
-                    <div className="gh-head-brand hidden-desktop">
-                        <a className="gh-burger" role="button" onClick={() => setMenuOpen(!menuOpen)}>
-                            <div className="gh-burger-box">
-                                <div className="gh-burger-inner"></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div className="gh-head-menu">
-                        <ul className="nav">
-                            <li className="nav-home"><a href="/">Home</a></li>
-                            <li className="nav-features"><a href="/features">Features</a></li>
-                            <li className="nav-shop nav-current"><a href="/store">Shop</a></li>
-                            <li className="nav-showcase"><a href="/showcase">Showcase</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-            
-            <div className="p-body-inner" style={{ minHeight: '150px' }}>
-                <div id="logo">
-                    <a href="/">
-                        <img src="/images/mainimage/title.png" style={{ maxWidth: "875px", borderRadius: "12px" }} alt="Pokefun Logo" />
-                    </a>
-                </div>
-            </div>
-        </div>
+        <SiteHeader />
 
-        <main id="site-main" className="site-main outer">
-           <div className="inner posts">
-              <div className="cobblemon-shop-wrapper" style={{ marginTop: '0px' }}>
-                
-                {/* Global Style Override for Shop Page */}
-                <style dangerouslySetInnerHTML={{__html: `
-                  /* Keep global header and footer visible, just hide the default sidebar */
-                  .desktop-sidebar-container { display: none !important; } 
-                `}} />
+            <main id="site-main" className="site-main outer" style={{ background: '#f8fafc', margin: 0, padding: 0 }}>
+               <div className="inner posts" style={{ width: '100%', maxWidth: 'none', padding: 0 }}>
+                  <div className="cobblemon-shop-wrapper" style={{ marginTop: '0px', padding: '40px 20px', margin: '0 auto', maxWidth: '1200px' }}>
+                    
+                    {/* Global Style Override for Shop Page */}
+                    <style dangerouslySetInnerHTML={{__html: `
+                      /* Keep global header and footer visible, just hide the default sidebar */
+                      .desktop-sidebar-container { display: none !important; } 
+                      
+                      .cobblemon-shop-wrapper {
+                        --shop-bg: #f8fafc;
+                        --shop-box: #ffffff;
+                        --shop-border: #e2e8f0;
+                        --shop-text: #333333;
+                        --shop-text-muted: #64748b;
+                        --accent-color: #0ea5e9;
+                        --accent-hover: #0284c7;
+                        
+                        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                        color: var(--shop-text);
+                        background: var(--shop-bg);
+                      }
+                      
+                      .cobblemon-shop-wrapper h1, .cobblemon-shop-wrapper h2, .cobblemon-shop-wrapper h3 {
+                        color: #1e293b;
+                      }
+
+                      .cobblemon-shop-wrapper .category-pill {
+                        background: var(--shop-box);
+                        border: 1px solid var(--shop-border);
+                        color: var(--shop-text);
+                      }
+
+                      .cobblemon-shop-wrapper .category-pill.active {
+                        background: var(--accent-color);
+                        color: #fff;
+                        border-color: var(--accent-color);
+                      }
+
+                      .cobblemon-shop-wrapper .package-card {
+                        background: var(--shop-box);
+                        border: 1px solid var(--shop-border);
+                        border-radius: 12px;
+                        overflow: hidden;
+                        transition: transform 0.2s, box-shadow 0.2s;
+                        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                      }
+
+                      .cobblemon-shop-wrapper .package-card:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                        border-color: #cbd5e1;
+                      }
+                    `}} />
 
                 {/* TOP NAV & STATUS */}
                 <div className="shop-top-bar" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '40px', padding: '10px 0' }}>
@@ -427,11 +435,6 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
                   </button>
                 </li>
               ))}
-              <li>
-                <a href="/modpacks" className="cat-btn">
-                  Modpack links
-                </a>
-              </li>
             </ul>
           </div>
 
@@ -464,55 +467,7 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
             )}
           </div>
 
-          {/* Giftcard Module */}
-          <div className="sidebar-box module-box text-center">
-            <h3 className="module-title">Giftcard Balance</h3>
-            <div className="giftcard-form">
-              <input 
-                type="text" 
-                placeholder="Enter gift card number" 
-                className="input-dark"
-                value={giftcardNumber}
-                onChange={(e) => setGiftcardNumber(e.target.value)}
-              />
-              <button className="btn-grey w-full" onClick={handleCheckGiftcard}>Check</button>
-            </div>
-          </div>
 
-          {/* Top Customer Module */}
-          <div className="sidebar-box module-box text-center">
-            <h3 className="module-title">Top Customer</h3>
-            {topCustomer && topCustomer.player && topCustomer.player.name ? (
-              <div className="recent-payment-item" style={{justifyContent: 'center', margin: '0'}}>
-                <img src={`https://mc-heads.net/avatar/${topCustomer.player.name}/32`} alt="Avatar" className="rp-avatar" style={{width:'40px', height:'40px'}}/>
-                <div className="rp-info">
-                  <div className="rp-name" style={{fontSize: '1.2rem', textAlign: 'center'}}>{topCustomer.player.name}</div>
-                  <div className="rp-desc" style={{textAlign: 'center', color: '#ffd700'}}><i className="fa-solid fa-crown"></i> Top Supporter</div>
-                </div>
-              </div>
-            ) : (
-              <p className="module-empty-text">No recent top purchaser to display.</p>
-            )}
-          </div>
-
-          {/* Recent Payments Module */}
-          <div className="sidebar-box module-box">
-            <h3 className="module-title">Recent Payments</h3>
-            {recentPayments.length > 0 ? (
-              recentPayments.map((payment, index) => (
-                <div className="recent-payment-item" key={index}>
-                  <img src={`https://mc-heads.net/avatar/${payment.player.name}/32`} alt="Avatar" className="rp-avatar"/>
-                  <div className="rp-info">
-                    <div className="rp-name">{payment.player.name}</div>
-                    <div className="rp-desc">{payment.packages && payment.packages[0] ? payment.packages[0].name : "Store Package"}</div>
-                    <div className="rp-date">{new Date(payment.date).toLocaleDateString()}</div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="module-empty-text" style={{textAlign: 'center'}}>No recent payments found.</p>
-            )}
-          </div>
 
         </div>
 

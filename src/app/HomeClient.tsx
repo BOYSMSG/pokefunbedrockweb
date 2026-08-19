@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Script from "next/script";
+import SiteHeader from "@/components/SiteHeader";
 
 const showcaseVideos = [
   { id: "9I7zFIpuUCM", title: "Main Showcase", description: "Discover the breathtaking world of Pokefun Bedrock." },
@@ -98,7 +99,7 @@ export default function HomeClient() {
           setIsVideoVisible(false);
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.5 }
     );
     if (videoRef.current) {
       observer.observe(videoRef.current);
@@ -163,88 +164,12 @@ export default function HomeClient() {
 
   return (
     <div className="viewport">
-        <div id="gh-header">
-            <div id="nav">
-                <div className="container">
-                    <a href="/" className="active-pill">Home</a>
-                    <a href="/features">Features</a>
-                    <a href="/store">Shop</a>
-                    <a href="/showcase">Showcase</a>
-                    <a href="/team">Team</a>
-                    <a href="https://discord.gg/9AU3kHZZDT" target="_blank" rel="noopener noreferrer">Discord</a>
-                </div>
-            </div>
-            <div className="header-bg"></div>
-            <header id="gh-head" className="gh-head has-cover">
-                <nav className="gh-head-inner inner gh-container">
-                    <div className="gh-head-brand hidden-desktop">
-                        <a className="gh-burger" role="button" onClick={() => setMenuOpen(!menuOpen)}>
-                            <div className="gh-burger-box">
-                                <div className="gh-burger-inner"></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div className="gh-head-menu">
-                        <ul className="nav">
-                            <li className="nav-home nav-current"><a href="/">Home</a></li>
-                            <li className="nav-features"><a href="/features">Features</a></li>
-                            <li className="nav-shop"><a href="/store">Shop</a></li>
-                            <li className="nav-showcase"><a href="/showcase">Showcase</a></li>
-                            <li className="nav-team"><a href="/team">Team</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-            
-            <div className="p-body-inner" style={{ width: '100%', boxSizing: 'border-box', padding: '0 20px', gap: '20px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                <a href="#" id="players" className="info-card" style={{ position: 'relative', zIndex: 10, minWidth: '200px', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                    <i className="fa-solid fa-users" style={{ fontSize: '32px', order: -5, margin: 0 }}></i>
-                    <div className="info-text" style={{ textAlign: 'center' }}>
-                        <div className="if-large">Players <span className="count">{displayCount}</span></div>
-                        <div className="if-small">mcpe.pokefun.in | Port: 19132</div>
-                    </div>
-                </a>
-                <div id="logo" style={{ flexGrow: 1, display: 'flex', justifyContent: 'center', minWidth: '300px' }}>
-                    <a href="/" style={{ display: 'inline-block', maxWidth: '100%' }}>
-                        <img className="animate__infinite animate__slower animate__animated animate__pulse"
-                            src="/images/mainimage/title.png" style={{ width: "427px", maxWidth: "100%", height: "auto", borderRadius: "12px" }} alt="Pokefun Logo" />
-                    </a>
-                    <div className="circle">
-                        <div className="circle"></div>
-                    </div>
-                </div>
-                <a id="discord" target="_blank" href="https://discord.gg/9AU3kHZZDT" className="info-card" rel="noreferrer" style={{ position: 'relative', zIndex: 10, minWidth: '200px', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                    <i className="fa-brands fa-discord" style={{ fontSize: '32px', order: -5, margin: 0 }}></i>
-                    <div className="info-text" style={{ textAlign: 'center' }}>
-                        <div className="if-large">DISCORD <span className="count">JOIN</span></div>
-                        <div className="if-small">Join the Community</div>
-                    </div>
-                </a>
-            </div>
-            <div className="custom-shape-divider-bottom-1675067978 custom-shadow">
-                <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
-                    preserveAspectRatio="none">
-                    <path
-                        d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-                        className="shape-fill"></path>
-                </svg>
-            </div>
-            <div className="custom-shape-divider-bottom-1675067978">
-                <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
-                    preserveAspectRatio="none">
-                    <path
-                        d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-                        className="shape-fill"></path>
-                </svg>
-            </div>
-            <div id="tsparticles"></div>
-        </div>
+        <SiteHeader />
 
-        <main>
-            <main id="site-main" className="site-main outer">
-                <div className="inner posts">
+        <main id="site-main" className="site-main outer" style={{ background: '#f8fafc', margin: 0, padding: 0 }}>
+            <div className="inner posts" style={{ width: '100%', maxWidth: 'none', padding: 0 }}>
 
-                    <div className="inner" style={{ marginTop: '20px', marginBottom: '60px' }}>
+                <div className="inner" style={{ marginTop: '20px', marginBottom: '60px', padding: '0 20px' }}>
                         <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '22px', fontWeight: 'bold', color: '#333' }}>
                             Experience the best <strong style={{ color: '#0ea5e9' }}>Minecraft Bedrock Pokemon Server</strong>! <br />
                             Join the <strong style={{ color: '#0ea5e9' }}>POKEDROCK SMP POKEFUN</strong> community today.
@@ -432,7 +357,6 @@ export default function HomeClient() {
 
                 </div>
             </main>
-        </main>
         
         <section id="footer">
             <div className="inner" style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", justifyContent: "space-between", padding: "0 20px" }}>

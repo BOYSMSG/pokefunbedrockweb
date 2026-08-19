@@ -116,6 +116,8 @@ const showcaseImages = [
   "photo_9_2024-12-08_22-44-01.jpg"
 ];
 
+import SiteHeader from "@/components/SiteHeader";
+
 export default function ShowcasePage() {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -129,66 +131,24 @@ export default function ShowcasePage() {
 
   return (
     <div className="viewport">
-        <div id="gh-header">
-            <div id="nav">
-                <div className="container">
-                    <a href="/">Home</a>
-                    <a href="/features">Features</a>
-                    <a href="/store">Shop</a>
-                    <a href="/showcase" className="active-pill">Showcase</a>
-                    <a href="/team">Team</a>
-                    <a href="https://discord.gg/9AU3kHZZDT" target="_blank" rel="noopener noreferrer">Discord</a>
-                </div>
-            </div>
-            <div className="header-bg" style={{ height: '350px' }}></div>
-            <header id="gh-head" className="gh-head has-cover">
-                <nav className="gh-head-inner inner gh-container">
-                    <div className="gh-head-brand hidden-desktop">
-                        <a className="gh-burger" role="button" onClick={() => setMenuOpen(!menuOpen)}>
-                            <div className="gh-burger-box">
-                                <div className="gh-burger-inner"></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div className="gh-head-menu">
-                        <ul className="nav">
-                            <li className="nav-home"><a href="/">Home</a></li>
-                            <li className="nav-features"><a href="/features">Features</a></li>
-                            <li className="nav-shop"><a href="/store">Shop</a></li>
-                            <li className="nav-showcase nav-current"><a href="/showcase">Showcase</a></li>
-                            <li className="nav-team"><a href="/team">Team</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-            
-            <div className="p-body-inner" style={{ minHeight: '200px' }}>
-                <div id="logo" style={{ display: 'flex', justifyContent: 'center', width: '100%', overflow: 'visible' }}>
-                    <a href="/" style={{ display: 'inline-block' }}>
-                        <img className="animate__infinite animate__slower animate__animated animate__pulse" src="/images/mainimage/title.png" style={{ width: "1125px", maxWidth: "none", height: "auto", borderRadius: "12px", display: "block" }} alt="Pokefun Logo" />
-                    </a>
-                </div>
-            </div>
-        </div>
+        <SiteHeader />
 
-        <main>
-            <main id="site-main" className="site-main outer">
-                <div className="inner posts">
-                    <div className="inner" style={{ marginTop: '40px', marginBottom: '80px' }}>
-                        <div className="section-title"
-                            style={{ textAlign: 'center', marginBottom: '40px', fontSize: '36px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '2px', color: '#FF1A75' }}>
-                            Showcase Gallery
-                        </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '30px', margin: '0 auto', maxWidth: '1200px', padding: '0 20px' }}>
-                           {showcaseImages.map((img, i) => (
-                               <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: '0 15px 35px rgba(0,0,0,0.2)', transition: 'transform 0.3s' }} className="hover:scale-105">
-                                   <img src={`/images/showcase/${img}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', aspectRatio: '16/9' }} alt="Showcase" />
-                               </div>
-                           ))}
-                        </div>
+        <main id="site-main" className="site-main outer" style={{ background: '#f8fafc', margin: 0, padding: 0 }}>
+            <div className="inner posts" style={{ width: '100%', maxWidth: 'none', padding: 0 }}>
+                <div className="inner" style={{ marginTop: '40px', marginBottom: '80px', padding: '0 20px' }}>
+                    <div className="section-title"
+                        style={{ textAlign: 'center', marginBottom: '40px', fontSize: '36px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '2px', color: '#0ea5e9' }}>
+                        Showcase Gallery
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '30px', margin: '0 auto', maxWidth: '1200px', padding: '0 20px' }}>
+                       {showcaseImages.map((img, i) => (
+                           <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: '0 15px 35px rgba(0,0,0,0.2)', transition: 'transform 0.3s' }} className="hover:scale-105">
+                               <img src={`/images/showcase/${img}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', aspectRatio: '16/9' }} alt="Showcase" />
+                           </div>
+                       ))}
                     </div>
                 </div>
-            </main>
+            </div>
         </main>
         
         <section id="footer">
