@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) return null;
         
         // Mock Admin verification
-        if (credentials.email === "boysmsg832@gmail.com" && credentials.password === "kalu#$0109msg$pokefun") {
+        if (credentials.email === "msgboys832@gmail.com" && credentials.password === "Ladka@bedrock123*") {
           
           // Optional: Verify 2FA code here if needed in the future
           // For now, any code works, but we mock the security layer

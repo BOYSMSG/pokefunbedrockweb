@@ -7,8 +7,9 @@ import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 
 export default function ShopClient({ initialCategories }: { initialCategories: any[] }) {
-  const filterBedrockCategories = (cats: any[]) => cats.filter(c => c.name.toLowerCase().includes('bedrock'));
-  const [categories, setCategories] = useState<any[]>(filterBedrockCategories(initialCategories));
+  // Categories are already processed server-side into virtual subcategories (Pokecoins, Ranks, etc.)
+  // No client-side transformation needed — prevents hydration mismatch.
+  const [categories, setCategories] = useState<any[]>(initialCategories);
   const [activeCategoryId, setActiveCategoryId] = useState<number | string>('home');
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -135,7 +136,44 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
         if (res.ok) {
           const data = await res.json();
           if (data && data.data) {
-            setCategories(data.data.filter((c: any) => c.name.toLowerCase().includes('bedrock')));
+            // Apply same virtual category splitting as server-side processing
+            const bedrockCats = data.data.filter((c: any) => c?.name?.toLowerCase().includes('bedrock'));
+            let allPackages: any[] = [];
+            bedrockCats.forEach((c: any) => {
+              if (c.packages && Array.isArray(c.packages)) {
+                allPackages = allPackages.concat(c.packages);
+              }
+            });
+
+            if (allPackages.length === 0) {
+              setCategories(bedrockCats);
+            } else {
+              const virtualCats = [
+                { id: 'v-ranks',     name: 'Ranks & Perks',    packages: [] as any[] },
+                { id: 'v-pokecoins', name: 'Pokecoins',        packages: [] as any[] },
+                { id: 'v-kits',      name: 'Kits & Bundles',   packages: [] as any[] },
+                { id: 'v-keys',      name: 'Crate Keys',       packages: [] as any[] },
+                { id: 'v-stones',    name: 'Protection Stones',packages: [] as any[] },
+                { id: 'v-others',    name: 'Other Items',      packages: [] as any[] },
+              ];
+              allPackages.forEach((pkg: any) => {
+                const name = pkg.name.toLowerCase();
+                if (name.includes('coin') || name.includes('pokecoin') || /^[\d,]+/.test(name.trim())) {
+                  virtualCats[1].packages.push(pkg);
+                } else if (name.includes('rank') || name.includes('vip') || name.includes('mvp') || name.includes('elite') || name.includes('pro')) {
+                  virtualCats[0].packages.push(pkg);
+                } else if (name.includes('kit') || name.includes('bundle')) {
+                  virtualCats[2].packages.push(pkg);
+                } else if (name.includes('key') || name.includes('crate')) {
+                  virtualCats[3].packages.push(pkg);
+                } else if (name.includes('stone') || name.includes('protection')) {
+                  virtualCats[4].packages.push(pkg);
+                } else {
+                  virtualCats[5].packages.push(pkg);
+                }
+              });
+              setCategories(virtualCats.filter(vc => vc.packages.length > 0));
+            }
           }
         }
       } catch (err) {
@@ -475,7 +513,7 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
         <div className="shop-main">
           {activeCategoryId === 'home' ? (
             <div className="category-container store-home-container" style={{ padding: '40px', background: '#111', border: '1px solid #222', borderRadius: '12px', color: '#ccc' }}>
-              <h2 style={{ color: 'white', fontSize: '3rem', marginBottom: '20px', textAlign: 'center', fontWeight: '800' }}>WELCOME TO THE OFFICIAL <br/><span style={{color: '#4bc8c8'}}>POKEFUN STORE</span></h2>
+              <h2 style={{ color: 'white', fontSize: '3rem', marginBottom: '20px', textAlign: 'center', fontWeight: '800' }}>WELCOME TO THE OFFICIAL <br/><span style={{color: '#4bc8c8'}}>POKEDROCK STORE</span></h2>
               
               {storeConfig?.saleActive && (
                 <SaleBanner 
@@ -485,86 +523,117 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
                 />
               )}
 
-              <p style={{ fontSize: '1.2rem', lineHeight: '1.6', marginBottom: '20px', textAlign: 'center' }}>
-                <strong>POKEFUN JAVA</strong> is a free-to-play 1st Public cracked Minecraft Server of <strong>Cobblemon 1.7.1 and many more</strong>. Purchase items here to enhance your Pokémon journey, unlock special perks, and show off a unique style on the server!
-              </p>
-            
-              <p style={{ fontSize: '1.2rem', lineHeight: '1.6', marginBottom: '20px', textAlign: 'center' }}>
-                To begin, please select a category from the sidebar.
-              </p>
-            
-              <div style={{ background: 'rgba(251, 191, 36, 0.1)', borderLeft: '5px solid #fbbf24', padding: '20px', marginBottom: '30px', color: '#fbbf24', fontSize: '1.2rem', borderRadius: '4px' }}>
-                <strong>NOTE</strong> - Please ensure you enter your correct <strong>Java Edition Gamertag</strong> to receive your items.<br/>
-                Purchases are credited to the player name entered at checkout.
-              </div>
-            
-              {featuredPackage && (
-                <>
-                  <h3 style={{ color: 'white', fontSize: '2.2rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #333', paddingBottom: '10px' }}>🔥 FEATURED ITEM 🔥</h3>
-                  <div className="package-grid" style={{ padding: 0, border: 'none', background: 'transparent', marginBottom: '30px' }}>
-                    <div className="package-card" style={{ maxWidth: '400px', margin: '0 auto', gridColumn: '1 / -1' }}>
-                      <div className="pkg-image-wrapper" onClick={() => { setSelectedPkg(featuredPackage); setSelectedImage(featuredPackage.image); setCopied(false); }}>
-                        <img src={featuredPackage.image || "https://i.imgur.com/Kz8V5wN.png"} alt={featuredPackage.name} className="pkg-image" />
-                      </div>
-                      <div className="pkg-details">
-                        <h3 className="pkg-name" onClick={() => { setSelectedPkg(featuredPackage); setSelectedImage(featuredPackage.image); setCopied(false); }}>{featuredPackage.name}</h3>
-                        <div className="pkg-price">
-                          {featuredPackage.discount > 0 && (
-                            <span style={{ textDecoration: 'line-through', color: '#a3a3a3', fontSize: '0.85em', marginRight: '8px' }}>
-                              {(parseFloat(featuredPackage.base_price) + parseFloat(featuredPackage.discount)).toFixed(2)} {featuredPackage.currency}
+              <div style={{ fontSize: '1.1rem', lineHeight: '1.8', whiteSpace: 'pre-wrap' }}>
+                <p><strong>POKEDROCK SMP</strong> is a free-to-play Minecraft Bedrock / MCPE Pokémon server powered by the SERP Pokedrock Addon.</p>
+                <p>Purchase items from our official store to enhance your Pokémon adventure, unlock exclusive perks, get powerful rewards, customize your experience, and support the continued development of Pokedrock SMP!</p>
+                <p>To begin, simply select a category from the sidebar and choose what you want to purchase.</p>
+
+                <div style={{ background: 'rgba(251, 191, 36, 0.1)', borderLeft: '5px solid #fbbf24', padding: '20px', margin: '30px 0', color: '#fbbf24', fontSize: '1.2rem', borderRadius: '4px' }}>
+                  ⚠️ <strong>IMPORTANT:</strong> Please make sure you enter your correct <strong>Minecraft Bedrock Gamertag / Xbox Gamertag</strong> when checking out.<br/>
+                  Your purchase will be delivered to the player name entered during checkout.
+                </div>
+
+                {featuredPackage && (
+                  <>
+                    <h3 style={{ color: 'white', fontSize: '2.2rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #333', paddingBottom: '10px' }}>🔥 FEATURED ITEM 🔥</h3>
+                    <div className="package-grid" style={{ padding: 0, border: 'none', background: 'transparent', marginBottom: '30px' }}>
+                      <div className="package-card" style={{ maxWidth: '400px', margin: '0 auto', gridColumn: '1 / -1' }}>
+                        <div className="pkg-image-wrapper" onClick={() => { setSelectedPkg(featuredPackage); setSelectedImage(featuredPackage.image); setCopied(false); }}>
+                          <img src={featuredPackage.image || "https://i.imgur.com/Kz8V5wN.png"} alt={featuredPackage.name} className="pkg-image" />
+                        </div>
+                        <div className="pkg-details">
+                          <h3 className="pkg-name" onClick={() => { setSelectedPkg(featuredPackage); setSelectedImage(featuredPackage.image); setCopied(false); }}>{featuredPackage.name}</h3>
+                          <div className="pkg-price">
+                            {featuredPackage.discount > 0 && (
+                              <span style={{ textDecoration: 'line-through', color: '#a3a3a3', fontSize: '0.85em', marginRight: '8px' }}>
+                                {(parseFloat(featuredPackage.base_price) + parseFloat(featuredPackage.discount)).toFixed(2)} {featuredPackage.currency}
+                              </span>
+                            )}
+                            <span style={{ color: featuredPackage.discount > 0 ? '#e74c3c' : 'white', fontWeight: 'bold' }}>
+                              {featuredPackage.total_price} {featuredPackage.currency}
                             </span>
-                          )}
-                          <span style={{ color: featuredPackage.discount > 0 ? '#e74c3c' : 'white', fontWeight: 'bold' }}>
-                            {featuredPackage.total_price} {featuredPackage.currency}
-                          </span>
+                          </div>
+                        </div>
+                        <div className="pkg-actions">
+                          <button className="btn-buy" onClick={() => handleAddToCart(featuredPackage)} disabled={loadingPkg === featuredPackage.id}>
+                            {loadingPkg === featuredPackage.id ? <i className="fa-solid fa-spinner fa-spin"></i> : "Add to Basket"}
+                          </button>
+                          <button className="btn-info" onClick={() => setSelectedPkg(featuredPackage)}>
+                            <i className="fa-solid fa-circle-info"></i>
+                          </button>
                         </div>
                       </div>
-                      <div className="pkg-actions">
-                        <button className="btn-buy" onClick={() => handleAddToCart(featuredPackage)} disabled={loadingPkg === featuredPackage.id}>
-                          {loadingPkg === featuredPackage.id ? <i className="fa-solid fa-spinner fa-spin"></i> : "Add to Basket"}
-                        </button>
-                        <button className="btn-info" onClick={() => setSelectedPkg(featuredPackage)}>
-                          <i className="fa-solid fa-circle-info"></i>
-                        </button>
-                      </div>
                     </div>
-                  </div>
-                </>
-              )}
+                  </>
+                )}
 
-              <h3 style={{ color: 'white', fontSize: '2.2rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #333', paddingBottom: '10px' }}>⭐ EPIC SERVER FEATURES ⭐</h3>
-              <p style={{ fontSize: '1.2rem', marginBottom: '15px' }}>Dive into the most feature-rich Cobblemon experience!</p>
-              <ul style={{ fontSize: '1.2rem', lineHeight: '1.8', marginBottom: '30px', listStyle: 'none', padding: 0 }}>
-                <li>💰 <strong>Global Trade System (GTS) & Shops:</strong> Buy, sell, and trade Pokémon and items with players worldwide to get rich!</li>
-                <li>🎁 <strong>Daily Rewards & Kits:</strong> Claim free Daily Rewards, vote for crate keys, and unlock weekly/monthly Kits.</li>
-                <li>🛡️ <strong>Land Claiming Menu:</strong> Protect your builds and resources with easy-to-use claim tools and menus.</li>
-                <li>🔥 <strong>Exclusive Evolutions & Mechanics:</strong> Mega, D-Max, G-Max, Pasture Breeding, and Ultra Beasts are all active!</li>
-                <li>✨ <strong>Unique Content:</strong> Enjoy Rideable Pokémon, Custom Skins, Abilities, and the challenging Pokémon GYMS.</li>
-                <li>💡 <strong>Plus Many More:</strong> PokeBuilder, Orbs/Plates, Daily Quests, and Fusion Pokémon coming soon!</li>
-              </ul>
-            
-              <h3 style={{ color: 'white', fontSize: '2.2rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #333', paddingBottom: '10px' }}>SUPPORT</h3>
-              <p style={{ fontSize: '1.2rem', lineHeight: '1.6', marginBottom: '15px' }}>
-                Need questions answered? Waited more than 20 minutes for your package? Ask the community/staff on <strong>Discord</strong>, or submit a support ticket there for payment issues.
-              </p>
-              <p style={{ fontSize: '1.2rem', marginBottom: '20px' }}>Public Contact Email: <a href="mailto:contactmcpefun@gmail.com" style={{color: '#4bc8c8', fontWeight: 'bold'}}>contactmcpefun@gmail.com</a></p>
-              <a href="https://discord.com/invite/NtE8QBkmwR" target="_blank" rel="noopener noreferrer" className="btn-cyan" style={{ display: 'inline-block', textDecoration: 'none', padding: '15px 30px', borderRadius: '8px', marginBottom: '40px', fontWeight: 'bold', fontSize: '1.2rem' }}>
-                <i className="fa-brands fa-discord"></i> Join Our Discord Server
-              </a>
-            
-              <h3 style={{ color: 'white', fontSize: '2.2rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #333', paddingBottom: '10px' }}>REFUND POLICY</h3>
-              <p style={{ fontSize: '1.2rem', lineHeight: '1.6', marginBottom: '15px' }}>
-                All payments are final and non-refundable. Attempting a chargeback will result in a permanent banishment from all of our servers and associated stores.
-              </p>
-              <p style={{ fontSize: '1.2rem', lineHeight: '1.6', marginBottom: '15px' }}>
-                Payments are taken and secured by Tebex, a trusted leader in online gaming transactions.
-              </p>
-              <p style={{ fontSize: '1.2rem', lineHeight: '1.6', marginBottom: '15px' }}>
-                It could take between 1-20 minutes for your purchase to be credited in-game. If you are still not credited after this time, please open a support ticket on our Discord with proof of purchase.
-              </p>
-              <p style={{ fontSize: '1.2rem', lineHeight: '1.6', marginBottom: '15px' }}>
-                If you are banned from POKEFUN JAVA for breaking our rules, you will lose access to your purchased goods for the duration of your ban. The strict "no refund policy" will also remain in place.
-              </p>
+                <h3 style={{ color: 'white', fontSize: '2.2rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #333', paddingBottom: '10px' }}>⭐ POKEDROCK SMP FEATURES ⭐</h3>
+                
+                <h4 style={{ color: '#4bc8c8', marginTop: '20px' }}>🐾 Pokémon & Exclusive Pokémon</h4>
+                <p>Discover, collect, train, and build your ultimate Pokémon team. Get access to special and exclusive Pokémon available through the server and store.</p>
+                
+                <h4 style={{ color: '#4bc8c8', marginTop: '20px' }}>💎 Ranks & Premium Perks</h4>
+                <p>Unlock exclusive ranks with special perks, commands, rewards, kits, and other benefits designed to make your Pokedrock journey even better.</p>
+                
+                <h4 style={{ color: '#4bc8c8', marginTop: '20px' }}>🎁 Kits & Exclusive Rewards</h4>
+                <p>Get access to special kits and rewards depending on your rank or purchase. Enjoy valuable items and bonuses to help you progress faster.</p>
+                
+                <h4 style={{ color: '#4bc8c8', marginTop: '20px' }}>🪙 PokéCoins & In-Game Items</h4>
+                <p>Purchase PokéCoins and other useful in-game items to enhance your gameplay and enjoy everything Pokedrock has to offer.</p>
+                
+                <h4 style={{ color: '#4bc8c8', marginTop: '20px' }}>🏪 Trading & Economy</h4>
+                <p>Trade with other players, buy and sell items, build your wealth, and become one of the richest Trainers on Pokedrock SMP.</p>
+                
+                <h4 style={{ color: '#4bc8c8', marginTop: '20px' }}>🛡️ Land Protection</h4>
+                <p>Protect your builds, bases, Pokémon, and valuable resources using our land protection systems.</p>
+                
+                <h4 style={{ color: '#4bc8c8', marginTop: '20px' }}>⚔️ Pokémon Adventure</h4>
+                <p>Explore the world, catch Pokémon, battle other Trainers, build your team, and experience the unique Pokémon gameplay of Pokedrock SMP.</p>
+                
+                <h4 style={{ color: '#4bc8c8', marginTop: '20px' }}>✨ More Features Coming Soon</h4>
+                <p>We are constantly working on new systems, Pokémon content, rewards, cosmetics, events, and exciting features to make Pokedrock SMP even better!</p>
+
+                <h3 style={{ color: 'white', fontSize: '2.2rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #333', paddingBottom: '10px' }}>💰 SUPPORT POKEDROCK SMP</h3>
+                <p>Every purchase you make helps support Pokedrock SMP and contributes towards:</p>
+                <ul>
+                  <li>🖥️ Server hosting and infrastructure</li>
+                  <li>⚙️ Development and new features</li>
+                  <li>🐛 Bug fixes and optimization</li>
+                  <li>🎉 Events and community activities</li>
+                  <li>🆕 New Pokémon and content</li>
+                  <li>❤️ Keeping the server online and improving it for everyone</li>
+                </ul>
+                <p>Thank you for supporting Pokedrock SMP!<br/>Your support means a lot to us and helps us continue building a better Pokémon experience for the community.</p>
+
+                <h3 style={{ color: 'white', fontSize: '2.2rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #333', paddingBottom: '10px' }}>🆘 SUPPORT</h3>
+                <p>Having an issue with your purchase?<br/>If your package has not been delivered after 20 minutes, please contact our staff through Discord and provide proof of purchase.<br/>For payment issues, missing purchases, or other store-related problems, please open a support ticket on our Discord server.</p>
+                
+                <p><strong>💬 Join Our Discord</strong><br/>Need help, want to report an issue, or simply want to meet the community?<br/>Join our official Discord server and talk with the Pokedrock SMP community and staff.<br/>
+                Discord: <a href="https://discord.com/invite/NtE8QBkmwR" target="_blank" style={{color: '#4bc8c8'}}>https://discord.com/invite/NtE8QBkmwR</a></p>
+
+                <p><strong>📧 CONTACT</strong><br/>For general questions and support:<br/>Email: <a href="mailto:contact@pokefun.in" style={{color: '#4bc8c8'}}>contact@pokefun.in</a><br/>For purchase-related issues, we recommend opening a ticket on our Discord server so our staff can assist you faster.</p>
+
+                <h3 style={{ color: 'white', fontSize: '2.2rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #333', paddingBottom: '10px' }}>⚠️ REFUND POLICY</h3>
+                <p>All purchases are final and non-refundable.<br/>By completing a purchase on the Pokedrock SMP Store, you agree to our store terms and refund policy.<br/>Any attempt to perform an unauthorized chargeback or payment reversal may result in a permanent ban from Pokedrock SMP, our associated services, and/or our stores.<br/>Payments are processed and secured through Tebex, a trusted platform for gaming communities and online transactions.</p>
+
+                <h3 style={{ color: 'white', fontSize: '2.2rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #333', paddingBottom: '10px' }}>⏱️ PURCHASE DELIVERY</h3>
+                <p>Most purchases are delivered automatically to your Minecraft Bedrock account.<br/>Please allow up to 1–20 minutes for your purchase to appear in-game.<br/>If you have not received your purchase after this period:</p>
+                <ul>
+                  <li>Make sure you entered the correct Minecraft Bedrock Gamertag.</li>
+                  <li>Restart Minecraft or reconnect to the server.</li>
+                  <li>Check that you are connected to Pokedrock SMP.</li>
+                </ul>
+                <p>If the purchase is still missing, open a support ticket on our Discord.<br/>Provide your Tebex purchase receipt/order information so our staff can investigate.</p>
+
+                <h3 style={{ color: 'white', fontSize: '2.2rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #333', paddingBottom: '10px' }}>🚫 BANS & PURCHASED ITEMS</h3>
+                <p>If you are banned from Pokedrock SMP for violating our server rules, you may lose access to your purchased perks and items for the duration of your ban.<br/>A server ban does not automatically qualify you for a refund.<br/>All purchases remain subject to our server rules and store policies.</p>
+
+                <h3 style={{ color: 'white', fontSize: '2.2rem', marginTop: '40px', marginBottom: '20px', borderBottom: '2px solid #333', paddingBottom: '10px' }}>❤️ THANK YOU FOR SUPPORTING POKEDROCK</h3>
+                <p>Whether you purchase a rank, Pokémon, kit, PokéCoins, or another item from our store, you are directly supporting the future of Pokedrock SMP.<br/>Thank you for being part of our community and helping us make Pokedrock SMP bigger, better, and more exciting! 🎉</p>
+                
+                <h4 style={{ color: '#4bc8c8', marginTop: '20px', textAlign: 'center', fontSize: '1.5rem' }}>🐾 CATCH • TRAIN • BATTLE • BECOME THE BEST</h4>
+                <p style={{ textAlign: 'center', fontWeight: 'bold' }}>Welcome to Pokedrock SMP — your Pokémon adventure starts here!</p>
+              </div>
             </div>
           ) : (
             <div className="category-container">

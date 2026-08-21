@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Script from "next/script";
 import SiteHeader from "@/components/SiteHeader";
+import SaleBanner from "@/components/SaleBanner";
 
 const showcaseVideos = [
   { id: "9I7zFIpuUCM", title: "Main Showcase", description: "Discover the breathtaking world of Pokefun Bedrock." },
@@ -77,8 +78,20 @@ export default function HomeClient() {
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [ipCopied, setIpCopied] = useState(false);
   const [isVideoVisible, setIsVideoVisible] = useState(false);
+  const [storeConfig, setStoreConfig] = useState<any>(null);
   const videoRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    fetch('/api/store-config')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.config) {
+          setStoreConfig(data.config);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (iframeRef.current && iframeRef.current.contentWindow) {
@@ -168,6 +181,17 @@ export default function HomeClient() {
 
         <main id="site-main" className="site-main outer" style={{ background: '#f8fafc', margin: 0, padding: 0 }}>
             <div className="inner posts" style={{ width: '100%', maxWidth: 'none', padding: 0 }}>
+            
+                {storeConfig?.saleActive && (
+                  <div style={{ marginTop: '20px', padding: '0 20px' }}>
+                    <SaleBanner 
+                      endDate={storeConfig.saleEndDate}
+                      title={storeConfig.saleTitle}
+                      subtitle={storeConfig.saleSubtitle}
+                      link="/store"
+                    />
+                  </div>
+                )}
 
                 <div className="inner" style={{ marginTop: '20px', marginBottom: '60px', padding: '0 20px' }}>
                         <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '22px', fontWeight: 'bold', color: '#333' }}>
