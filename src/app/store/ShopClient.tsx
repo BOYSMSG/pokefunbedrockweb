@@ -558,7 +558,7 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
                           <button className="btn-buy" onClick={() => handleAddToCart(featuredPackage)} disabled={loadingPkg === featuredPackage.id}>
                             {loadingPkg === featuredPackage.id ? <i className="fa-solid fa-spinner fa-spin"></i> : "Add to Basket"}
                           </button>
-                          <button className="btn-info" onClick={() => setSelectedPkg(featuredPackage)}>
+                          <button className="btn-info" onClick={() => { setSelectedPkg(featuredPackage); setSelectedImage(featuredPackage.image); setCopied(false); }}>
                             <i className="fa-solid fa-circle-info"></i>
                           </button>
                         </div>
@@ -679,7 +679,7 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
                           >
                             {loadingPkg === pkg.id ? <i className="fa-solid fa-spinner fa-spin"></i> : "Add to Basket"}
                           </button>
-                          <button className="btn-info" onClick={() => setSelectedPkg(pkg)}>
+                          <button className="btn-info" onClick={() => { setSelectedPkg(pkg); setSelectedImage(pkg.image); setCopied(false); }}>
                             <i className="fa-solid fa-circle-info"></i>
                           </button>
                         </div>
@@ -1175,6 +1175,61 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
         .html-desc h3 { font-size: 1.5rem; }
         .html-desc strong { color: #0284c7; font-weight: bold; }
         .html-desc a { color: #10b981; text-decoration: underline; }
+
+        .modal-overlay {
+          position: fixed;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(0, 0, 0, 0.7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+        }
+
+        .clean-modal {
+          background: var(--shop-box);
+          color: var(--shop-text);
+          padding: 25px;
+          border-radius: 12px;
+          width: 90%;
+          max-width: 600px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+          display: flex;
+          flex-direction: column;
+          border: 2px solid var(--shop-border);
+        }
+        
+        .clean-modal.pkg-detail {
+          max-width: 700px;
+        }
+
+        .modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+          padding-bottom: 15px;
+          border-bottom: 1px solid var(--shop-border);
+        }
+
+        .modal-header h2 {
+          margin: 0;
+          font-size: 1.8rem;
+          color: var(--shop-text);
+        }
+
+        .btn-close {
+          background: transparent;
+          color: var(--shop-text-muted);
+          border: none;
+          font-size: 1.8rem;
+          cursor: pointer;
+          transition: color 0.2s;
+        }
+        
+        .btn-close:hover {
+          color: #e74c3c;
+        }
 
         @keyframes cartBounce {
           0% { transform: scale(1); }
