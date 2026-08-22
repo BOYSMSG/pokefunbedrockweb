@@ -536,9 +536,9 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
                 <p>Purchase items from our official store to enhance your Pokémon adventure, unlock exclusive perks, get powerful rewards, customize your experience, and support the continued development of Pokedrock SMP!</p>
                 <p>To begin, simply select a category from the sidebar and choose what you want to purchase.</p>
 
-                <div style={{ background: 'rgba(254, 199, 113, 0.15)', borderLeft: '5px solid #fec771', padding: '20px', margin: '30px 0', color: '#fec771', fontSize: '1.2rem', borderRadius: '4px' }}>
-                  ⚠️ <strong>IMPORTANT:</strong> Please make sure you enter your correct <strong>Minecraft Bedrock Gamertag / Xbox Gamertag</strong> when checking out.<br/>
-                  Your purchase will be delivered to the player name entered during checkout.
+                <div style={{ background: '#271f11', borderLeft: '5px solid #fec771', padding: '20px', margin: '30px 0', color: '#fec771', fontSize: '1.2rem', borderRadius: '4px' }}>
+                  <strong>NOTE -</strong> Please ensure you enter your correct <strong>Minecraft Bedrock Gamertag / Xbox Gamertag</strong> to receive your items.<br/>
+                  <span style={{ display: 'inline-block', marginTop: '8px' }}>Purchases are credited to the player name entered at checkout.</span>
                 </div>
 
                 {featuredPackage && (
