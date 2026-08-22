@@ -23,6 +23,14 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
   const [selectedPkg, setSelectedPkg] = useState<any | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [copied, setCopied] = useState<boolean>(false);
+  const [showServerSelectModal, setShowServerSelectModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    const selected = localStorage.getItem('pokefun_server_selected');
+    if (!selected) {
+      setShowServerSelectModal(true);
+    }
+  }, []);
   const [loadingPkg, setLoadingPkg] = useState<number | null>(null);
   const [cart, setCart] = useState<{pkg: any, qty: number}[]>([]);
   const [showCartModal, setShowCartModal] = useState<boolean>(false);
@@ -528,7 +536,7 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
                 <p>Purchase items from our official store to enhance your Pokémon adventure, unlock exclusive perks, get powerful rewards, customize your experience, and support the continued development of Pokedrock SMP!</p>
                 <p>To begin, simply select a category from the sidebar and choose what you want to purchase.</p>
 
-                <div style={{ background: 'rgba(251, 191, 36, 0.1)', borderLeft: '5px solid #fbbf24', padding: '20px', margin: '30px 0', color: '#fbbf24', fontSize: '1.2rem', borderRadius: '4px' }}>
+                <div style={{ background: 'rgba(254, 199, 113, 0.15)', borderLeft: '5px solid #fec771', padding: '20px', margin: '30px 0', color: '#fec771', fontSize: '1.2rem', borderRadius: '4px' }}>
                   ⚠️ <strong>IMPORTANT:</strong> Please make sure you enter your correct <strong>Minecraft Bedrock Gamertag / Xbox Gamertag</strong> when checking out.<br/>
                   Your purchase will be delivered to the player name entered during checkout.
                 </div>
@@ -733,6 +741,49 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
                 />
                 <button type="submit" className="btn-submit">Continue</button>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Server Selection Modal */}
+      {showServerSelectModal && (
+        <div className="modal-overlay" style={{ zIndex: 9999 }}>
+          <div className="clean-modal" style={{ maxWidth: '650px', textAlign: 'center' }}>
+            <h2 style={{ fontSize: '2rem', marginBottom: '15px', color: '#fec771' }}>Select Your Server</h2>
+            <p style={{ fontSize: '1.2rem', marginBottom: '30px', color: 'var(--shop-text-muted)' }}>
+              Please select which Minecraft server you want to purchase items for.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div 
+                style={{ 
+                  background: 'rgba(0,0,0,0.2)', border: '2px solid var(--shop-border)', padding: '30px', 
+                  borderRadius: '12px', cursor: 'pointer', transition: '0.2s', display: 'flex', flexDirection: 'column', alignItems: 'center'
+                }}
+                onClick={() => { window.location.href = 'https://store.pokefun.in'; }}
+                onMouseOver={(e) => { e.currentTarget.style.borderColor = '#10b981'; e.currentTarget.style.transform = 'translateY(-5px)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--shop-border)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+              >
+                <img src="/assets/images/cobblemon_logo.png" alt="Cobblemon" style={{ height: '80px', marginBottom: '15px', objectFit: 'contain' }} onError={(e) => e.currentTarget.style.display = 'none'} />
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>Java Edition</h3>
+                <p style={{ color: 'var(--shop-text-muted)', fontSize: '1rem', margin: 0 }}>Pokefun Java (Cobblemon)</p>
+                <button className="btn-buy" style={{ marginTop: '20px', width: '100%', fontSize: '1rem' }}>Go to Java Store</button>
+              </div>
+
+              <div 
+                style={{ 
+                  background: 'rgba(0,0,0,0.2)', border: '2px solid var(--shop-border)', padding: '30px', 
+                  borderRadius: '12px', cursor: 'pointer', transition: '0.2s', display: 'flex', flexDirection: 'column', alignItems: 'center'
+                }}
+                onClick={() => { localStorage.setItem('pokefun_server_selected', 'bedrock'); setShowServerSelectModal(false); }}
+                onMouseOver={(e) => { e.currentTarget.style.borderColor = '#4bc8c8'; e.currentTarget.style.transform = 'translateY(-5px)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--shop-border)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+              >
+                <img src="/assets/images/logo.png" alt="Pokedrock" style={{ height: '80px', marginBottom: '15px', objectFit: 'contain' }} />
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>Bedrock / MCPE</h3>
+                <p style={{ color: 'var(--shop-text-muted)', fontSize: '1rem', margin: 0 }}>Pokedrock SMP Bedrock</p>
+                <button className="btn-buy" style={{ marginTop: '20px', width: '100%', fontSize: '1rem', background: '#4bc8c8' }}>Stay on Bedrock</button>
+              </div>
             </div>
           </div>
         </div>
