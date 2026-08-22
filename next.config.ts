@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    return [
+      {
+        source: '/store',
+        destination: 'https://store.pokefun.in',
+        permanent: false,
+      },
+    ]
+  },
 };
 
 export default nextConfig;

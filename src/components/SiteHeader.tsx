@@ -73,7 +73,7 @@ export default function SiteHeader() {
           <div className="container">
               <a href="/" className={pathname === '/' ? "active-pill" : ""}>Home</a>
               <a href="/features" className={isActive('/features') ? "active-pill" : ""}>Features</a>
-              <a href="/store" className={isActive('/store') ? "active-pill" : ""}>Shop</a>
+              <a href="https://store.pokefun.in" className={isActive('/store') ? "active-pill" : ""}>Shop</a>
               <a href="/showcase" className={isActive('/showcase') ? "active-pill" : ""}>Showcase</a>
               <a href="/wiki" className={isActive('/wiki') ? "active-pill" : ""}>Wiki & FAQ</a>
               <a href="/team" className={isActive('/team') ? "active-pill" : ""}>Team</a>
@@ -94,7 +94,7 @@ export default function SiteHeader() {
                   <ul className="nav">
                       <li className={`nav-home ${pathname === '/' ? 'nav-current' : ''}`}><a href="/">Home</a></li>
                       <li className={`nav-features ${isActive('/features') ? 'nav-current' : ''}`}><a href="/features">Features</a></li>
-                      <li className={`nav-shop ${isActive('/store') ? 'nav-current' : ''}`}><a href="/store">Shop</a></li>
+                      <li className={`nav-shop ${isActive('/store') ? 'nav-current' : ''}`}><a href="https://store.pokefun.in">Shop</a></li>
                       <li className={`nav-showcase ${isActive('/showcase') ? 'nav-current' : ''}`}><a href="/showcase">Showcase</a></li>
                       <li className={`nav-wiki ${isActive('/wiki') ? 'nav-current' : ''}`}><a href="/wiki">Wiki & FAQ</a></li>
                       <li className={`nav-team ${isActive('/team') ? 'nav-current' : ''}`}><a href="/team">Team</a></li>
