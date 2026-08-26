@@ -46,14 +46,21 @@ export default function GlobalSaleBanner() {
   if (!storeConfig) return null;
 
   return (
-    <Link href="https://store.pokefun.in" className="info-card" style={{ display: "flex", alignItems: "center", gap: "15px", textDecoration: "none", color: "white", fontWeight: 900, marginBottom: "15px" }}>
-        <i className="fa-solid fa-bolt"></i>
-        <div className="info-text" style={{ textAlign: "left" }}>
-            <div className="if-large" style={{ textTransform: "uppercase" }}>
-                {storeConfig.saleTitle} <span className="count" style={{ background: '#ef4444', color: 'white' }}>{storeConfig.discountPercentage}% OFF</span>
-            </div>
-            <div className="if-small">Ends in {timeLeft}</div>
-        </div>
-    </Link>
+    <a href="https://store.pokefun.in" style={{ 
+      display: "block", 
+      background: "linear-gradient(90deg, #f59e0b, #ef4444)", 
+      color: "white", 
+      textAlign: "center", 
+      padding: "10px", 
+      textDecoration: "none", 
+      fontWeight: "bold",
+      fontSize: "1rem",
+      zIndex: 9999,
+      position: "relative"
+    }}>
+      <span style={{ marginRight: '10px' }}><i className="fa-solid fa-gift"></i></span>
+      {storeConfig.saleTitle} - <span style={{ background: 'rgba(0,0,0,0.2)', padding: '2px 6px', borderRadius: '4px', margin: '0 5px' }}>{storeConfig.discountPercentage}% OFF</span> 
+      <span style={{ marginLeft: '10px', fontSize: '0.9rem', opacity: 0.9 }}><i className="fa-regular fa-clock"></i> Ends in {timeLeft}</span>
+    </a>
   );
 }

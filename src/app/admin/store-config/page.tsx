@@ -38,8 +38,15 @@ export default function StoreConfigPage() {
         .then(res => res.json())
         .then(data => {
           if (data.success && data.config) {
-            // Format date for datetime-local input
-            const dateStr = new Date(data.config.saleEndDate).toISOString().slice(0, 16);
+            // Format date for datetime-local input safely
+            let dateStr = '';
+            try {
+              if (data.config.saleEndDate) {
+                dateStr = new Date(data.config.saleEndDate).toISOString().slice(0, 16);
+              }
+            } catch (e) {
+              console.error("Invalid date from DB");
+            }
             setConfig({
               ...data.config,
               saleEndDate: dateStr,

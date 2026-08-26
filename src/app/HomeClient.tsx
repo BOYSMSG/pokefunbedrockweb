@@ -182,18 +182,8 @@ export default function HomeClient() {
         <main id="site-main" className="site-main outer" style={{ background: '#f8fafc', margin: 0, padding: 0 }}>
             <div className="inner posts" style={{ width: '100%', maxWidth: 'none', padding: 0 }}>
             
-                {storeConfig?.saleActive && (
-                  <div style={{ marginTop: '20px', padding: '0 20px' }}>
-                    <SaleBanner 
-                      endDate={storeConfig.saleEndDate}
-                      title={storeConfig.saleTitle}
-                      subtitle={storeConfig.saleSubtitle}
-                      link="/store"
-                    />
-                  </div>
-                )}
-
-                <div className="inner" style={{ marginTop: '20px', marginBottom: '60px', padding: '0 20px' }}>
+                <div style={{ marginTop: '0px' }}>
+                    <div className="text-center showcase-header" style={{ marginBottom: "0px", paddingTop: "60px" }}>
                         <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '22px', fontWeight: 'bold', color: '#333' }}>
                             Experience the best <strong style={{ color: '#0ea5e9' }}>Minecraft Bedrock Pokemon Server</strong>! <br />
                             Join the <strong style={{ color: '#0ea5e9' }}>POKEDROCK SMP POKEFUN</strong> community today.

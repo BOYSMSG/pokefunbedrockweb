@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import GlobalSaleBanner from "./GlobalSaleBanner";
 
 export default function SiteHeader() {
   const [playerCount, setPlayerCount] = useState<number | string>("Loading...");
@@ -68,8 +69,10 @@ export default function SiteHeader() {
   };
 
   return (
-    <div id="gh-header">
-      <div id="nav">
+    <>
+      <GlobalSaleBanner />
+      <div id="gh-header">
+        <div id="nav">
           <div className="container">
               <a href="/" className={pathname === '/' ? "active-pill" : ""}>Home</a>
               <a href="/features" className={isActive('/features') ? "active-pill" : ""}>Features</a>
@@ -210,6 +213,7 @@ export default function SiteHeader() {
           </svg>
       </div>
       <div id="tsparticles"></div>
-    </div>
+      </div>
+    </>
   );
 }
