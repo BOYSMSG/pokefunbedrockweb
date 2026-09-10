@@ -370,7 +370,8 @@ export default function HomeClient() {
                     </div>
 
                 </div>
-            </main>
+            </div>
+        </main>
         
         <section id="footer">
             <div className="inner" style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", justifyContent: "space-between", padding: "0 20px" }}>
