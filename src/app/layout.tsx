@@ -4,6 +4,7 @@ import './globals.css';
 import Script from 'next/script';
 import { Providers } from '@/components/Providers';
 import { Analytics } from "@vercel/analytics/next";
+import { HALLOWEEN_THEME_ACTIVE } from '@/config/halloween';
 export const metadata: Metadata = {
   title: 'POKEDROCK SMP POKEFUN - Minecraft Bedrock Pokémon Server',
   description: 'Play the #1 Minecraft Bedrock Pokémon Server. Catch, train, and battle. Free to join!',
@@ -29,7 +30,33 @@ export default function RootLayout({
         <link rel="stylesheet" href="/css/all.min.css" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         <link rel="icon" href="/images/logo64x64.png" type="image/png" />
         <link rel="stylesheet" type="text/css" href="/css/cards.min.css" />
-        <style>{`:root { --ghost-accent-color: #FF1A75; }`}</style>
+        {HALLOWEEN_THEME_ACTIVE ? (
+          <style>{`
+            :root { 
+              --ghost-accent-color: #ff7518;
+              --halloween-orange: #ff7518;
+            }
+            #gh-header {
+              background: linear-gradient(180deg, #12031c 0%, #0d0115 100%) !important;
+              border-bottom: none !important;
+              box-shadow: 0 10px 35px rgba(255, 117, 24, 0.2) !important;
+            }
+            .active-pill {
+              background: linear-gradient(135deg, #ff6b08, #8e44ad) !important;
+              color: #ffffff !important;
+              box-shadow: 0 0 16px rgba(255, 107, 8, 0.7) !important;
+              border: 1px solid rgba(255, 175, 64, 0.4) !important;
+            }
+            .gh-head-button, .btn-primary, .btn-halloween {
+              background: linear-gradient(135deg, #ff6b08, #c0392b) !important;
+              color: #ffffff !important;
+              border: 1px solid #ff9f43 !important;
+              box-shadow: 0 0 12px rgba(255, 107, 8, 0.5) !important;
+            }
+          `}</style>
+        ) : (
+          <style>{`:root { --ghost-accent-color: #FF1A75; }`}</style>
+        )}
       </head>
       <body>
         <Providers>

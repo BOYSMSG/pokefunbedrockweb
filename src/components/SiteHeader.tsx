@@ -68,19 +68,61 @@ export default function SiteHeader() {
     return pathname.startsWith(path);
   };
 
+  const playNavHoverSound = () => {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(587.33, now); // D5 soft ghostly chime
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.1);
+    } catch (_) {}
+  };
+
+  const playNavClickSound = () => {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const now = ctx.currentTime;
+      // Spooky wooden bone knock / witch cauldron bubble snap
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(320, now);
+      osc.frequency.exponentialRampToValueAtTime(110, now + 0.14);
+      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.15);
+    } catch (_) {}
+  };
+
   return (
     <>
       <GlobalSaleBanner />
       <div id="gh-header">
         <div id="nav">
           <div className="container">
-              <a href="/" className={pathname === '/' ? "active-pill" : ""}>Home</a>
-              <a href="/features" className={isActive('/features') ? "active-pill" : ""}>Features</a>
-              <a href="https://store.pokefun.in" className={isActive('/store') ? "active-pill" : ""}>Shop</a>
-              <a href="/showcase" className={isActive('/showcase') ? "active-pill" : ""}>Showcase</a>
-              <a href="/wiki" className={isActive('/wiki') ? "active-pill" : ""}>Wiki & FAQ</a>
-              <a href="/team" className={isActive('/team') ? "active-pill" : ""}>Team</a>
-              <a href="https://discord.gg/9AU3kHZZDT" target="_blank" rel="noopener noreferrer">Discord</a>
+              <a href="/" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound} className={pathname === '/' ? "active-pill" : ""}>Home</a>
+              <a href="/features" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound} className={isActive('/features') ? "active-pill" : ""}>Features</a>
+              <a href="/halloween" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound} className={isActive('/halloween') ? "active-pill" : ""} style={{ color: "#ff7518", textShadow: "0 0 10px rgba(255, 117, 24, 0.55)" }}>🎃 Halloween</a>
+              <a href="https://store.pokefun.in" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound} className={isActive('/store') ? "active-pill" : ""}>Shop</a>
+              <a href="/showcase" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound} className={isActive('/showcase') ? "active-pill" : ""}>Showcase</a>
+              <a href="/wiki" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound} className={isActive('/wiki') ? "active-pill" : ""}>Wiki & FAQ</a>
+              <a href="/team" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound} className={isActive('/team') ? "active-pill" : ""}>Team</a>
+              <a href="https://discord.gg/9AU3kHZZDT" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound} target="_blank" rel="noopener noreferrer">Discord</a>
           </div>
       </div>
       <div className="header-bg"></div>
@@ -95,12 +137,13 @@ export default function SiteHeader() {
               </div>
               <div className="gh-head-menu">
                   <ul className="nav">
-                      <li className={`nav-home ${pathname === '/' ? 'nav-current' : ''}`}><a href="/">Home</a></li>
-                      <li className={`nav-features ${isActive('/features') ? 'nav-current' : ''}`}><a href="/features">Features</a></li>
-                      <li className={`nav-shop ${isActive('/store') ? 'nav-current' : ''}`}><a href="https://store.pokefun.in">Shop</a></li>
-                      <li className={`nav-showcase ${isActive('/showcase') ? 'nav-current' : ''}`}><a href="/showcase">Showcase</a></li>
-                      <li className={`nav-wiki ${isActive('/wiki') ? 'nav-current' : ''}`}><a href="/wiki">Wiki & FAQ</a></li>
-                      <li className={`nav-team ${isActive('/team') ? 'nav-current' : ''}`}><a href="/team">Team</a></li>
+                      <li className={`nav-home ${pathname === '/' ? 'nav-current' : ''}`}><a href="/" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound}>Home</a></li>
+                      <li className={`nav-features ${isActive('/features') ? 'nav-current' : ''}`}><a href="/features" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound}>Features</a></li>
+                      <li className={`nav-halloween ${isActive('/halloween') ? 'nav-current' : ''}`}><a href="/halloween" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound} style={{ color: "#ff7518" }}>🎃 Halloween</a></li>
+                      <li className={`nav-shop ${isActive('/store') ? 'nav-current' : ''}`}><a href="https://store.pokefun.in" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound}>Shop</a></li>
+                      <li className={`nav-showcase ${isActive('/showcase') ? 'nav-current' : ''}`}><a href="/showcase" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound}>Showcase</a></li>
+                      <li className={`nav-wiki ${isActive('/wiki') ? 'nav-current' : ''}`}><a href="/wiki" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound}>Wiki & FAQ</a></li>
+                      <li className={`nav-team ${isActive('/team') ? 'nav-current' : ''}`}><a href="/team" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound}>Team</a></li>
                   </ul>
               </div>
           </nav>
@@ -120,6 +163,32 @@ export default function SiteHeader() {
             padding: 0 20px;
             box-sizing: border-box;
         }
+        #nav .container>a {
+            transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+            display: inline-block;
+            border-radius: 40px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        #nav .container>a:hover {
+            transform: translateY(-4px) scale(1.08) !important;
+            color: #ff9f43 !important;
+            text-shadow: 0 0 10px #ff7518, 0 0 20px #ff3838, 0 0 30px #ffa502 !important;
+            background: rgba(255, 117, 24, 0.22) !important;
+            box-shadow: 0 4px 18px rgba(255, 117, 24, 0.45) !important;
+        }
+        #nav .container>a.active-pill:hover {
+            transform: translateY(-4px) scale(1.06) !important;
+            box-shadow: 0 0 25px rgba(255, 117, 24, 0.95), 0 0 40px rgba(142, 68, 173, 0.8) !important;
+        }
+        .gh-head-menu .nav a {
+            transition: all 0.22s ease !important;
+        }
+        .gh-head-menu .nav a:hover {
+            color: #ff9f43 !important;
+            text-shadow: 0 0 10px #ff7518 !important;
+            transform: translateY(-2px) !important;
+        }
         .custom-info-card {
             position: relative;
             z-index: 10;
@@ -129,9 +198,12 @@ export default function SiteHeader() {
             align-items: center;
             gap: 15px;
             text-decoration: none;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
         }
         .custom-info-card:hover {
             color: white;
+            transform: translateY(-4px) scale(1.04) !important;
+            box-shadow: 0 10px 25px rgba(255, 117, 24, 0.35) !important;
         }
         .custom-logo {
             flex: 1.5;
@@ -172,7 +244,7 @@ export default function SiteHeader() {
         }
       `}} />
       <div className="custom-header-inner">
-          <a href="#" onClick={(e) => { e.preventDefault(); copyIp(); }} id="players" className="custom-info-card">
+          <a href="#" onMouseEnter={playNavHoverSound} onMouseDown={(e) => { playNavClickSound(); }} onClick={(e) => { e.preventDefault(); copyIp(); }} id="players" className="custom-info-card">
               <i className="fa-solid fa-users" style={{ fontSize: '32px' }}></i>
               <div className="info-text" style={{ textAlign: 'center' }}>
                   <div className="if-large">Players <span className="count">{displayCount}</span></div>
@@ -188,7 +260,7 @@ export default function SiteHeader() {
                   <div className="circle"></div>
               </div>
           </div>
-          <a id="discord" target="_blank" href="https://discord.gg/9AU3kHZZDT" className="custom-info-card" rel="noreferrer">
+          <a id="discord" target="_blank" href="https://discord.gg/9AU3kHZZDT" onMouseEnter={playNavHoverSound} onMouseDown={playNavClickSound} className="custom-info-card" rel="noreferrer">
               <i className="fa-brands fa-discord" style={{ fontSize: '32px' }}></i>
               <div className="info-text" style={{ textAlign: 'center' }}>
                   <div className="if-large">DISCORD <span className="count">JOIN</span></div>
