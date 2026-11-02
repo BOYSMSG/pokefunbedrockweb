@@ -118,6 +118,10 @@ export default function SiteHeader() {
           </nav>
       </header>
       <style dangerouslySetInnerHTML={{__html: `
+        #gh-header {
+            min-height: auto !important;
+            padding-bottom: 20px !important;
+        }
         .custom-header-inner {
             display: flex;
             align-items: center;
@@ -126,10 +130,10 @@ export default function SiteHeader() {
             width: 100%;
             margin: 0 auto;
             color: white;
-            gap: 60px;
+            gap: 30px;
             position: relative;
             z-index: 5;
-            padding: 0 20px;
+            padding: 10px 20px 15px 20px;
             box-sizing: border-box;
         }
         .custom-info-card {
@@ -146,19 +150,32 @@ export default function SiteHeader() {
             color: white;
         }
         .custom-logo {
-            flex: 1.5;
+            flex: 1.8;
             display: flex;
             justify-content: center;
         }
         .custom-logo a {
             display: inline-block;
             width: 100%;
-            max-width: 427px;
+            max-width: 515px;
             text-align: center;
         }
         .custom-logo img {
             width: 100%;
             height: auto;
+        }
+        .custom-shape-divider-bottom-1675067978,
+        .custom-shape-divider-bottom-1675067978.custom-shadow {
+            height: 35px !important;
+            bottom: 0 !important;
+        }
+        .custom-shape-divider-bottom-1675067978 svg,
+        .custom-shape-divider-bottom-1675067978.custom-shadow svg {
+            height: 35px !important;
+        }
+        .custom-shape-divider-bottom-1675067978 path,
+        .custom-shape-divider-bottom-1675067978.custom-shadow path {
+            fill: #f8fafc !important;
         }
         @media (max-width: 900px) {
             .custom-header-inner {

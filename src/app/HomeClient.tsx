@@ -194,8 +194,8 @@ export default function HomeClient() {
             <div className="inner posts" style={{ width: '100%', maxWidth: 'none', padding: 0 }}>
             
                 <div style={{ marginTop: '0px' }}>
-                    <div className="text-center showcase-header" style={{ marginBottom: "0px", paddingTop: "60px" }}>
-                        <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '22px', fontWeight: 'bold', color: '#333' }}>
+                    <div className="text-center showcase-header" style={{ marginBottom: "0px", paddingTop: "15px" }}>
+                        <p style={{ textAlign: 'center', marginTop: '5px', fontSize: '22px', fontWeight: 'bold', color: '#333' }}>
                             Experience the best <strong style={{ color: '#0ea5e9' }}>Minecraft Bedrock Pokemon Server</strong>! <br />
                             Join the <strong style={{ color: '#0ea5e9' }}>POKEDROCK SMP POKEFUN</strong> community today.
                         </p>
