@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
+import SiteHeader from "@/components/SiteHeader";
 
 const newFeatures = [
     {
@@ -155,8 +156,6 @@ const newFeatures = [
     }
 ];
 
-import SiteHeader from "@/components/SiteHeader";
-
 export default function FeaturesPage() {
   return (
     <div className="viewport">
@@ -170,51 +169,60 @@ export default function FeaturesPage() {
                         Server Features
                     </div>
                         
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '60px', margin: '0 auto', maxWidth: '1000px', padding: '0 20px' }}>
-                           {newFeatures.map((feature, i) => {
-                               // Alternate layout: Even = Text Left, Image Right. Odd = Image Left, Text Right.
-                               const isImageLeft = i % 2 !== 0;
-                               
-                               return (
-                                   <div key={i} style={{ 
-                                       display: 'flex', 
-                                       flexDirection: isImageLeft ? 'row-reverse' : 'row', 
-                                       flexWrap: 'wrap',
-                                       alignItems: 'center',
-                                       gap: '40px'
-                                   }}>
-                                       <div style={{ flex: '1 1 45%', minWidth: '300px' }}>
-                                           <h3 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '15px', color: '#0ea5e9' }}>
-                                               {feature.title}
-                                           </h3>
-                                           <p style={{ fontSize: '18px', lineHeight: '1.6', color: '#555', whiteSpace: 'pre-wrap' }}>
-                                               {feature.desc}
-                                           </p>
-                                       </div>
-                                       
-                                       {(feature.image || feature.images) && (
-                                           <div style={{ flex: '1 1 45%', minWidth: '300px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 15px 35px rgba(0,0,0,0.15)', transition: 'transform 0.3s' }} className="hover:scale-105">
-                                               {feature.images ? (
-                                                   <div style={{ display: 'flex', flexDirection: 'row', gap: '10px', justifyContent: 'center' }}>
-                                                       {feature.images.map((img, idx) => (
-                                                           <img key={idx} src={img} style={{ width: 'calc(50% - 5px)', height: 'auto', display: 'block', objectFit: 'contain', borderRadius: '8px' }} alt={`${feature.title} ${idx+1}`} />
-                                                       ))}
-                                                   </div>
-                                               ) : (
-                                                  <img src={feature.image} style={{ width: '100%', height: '300px', display: 'block', objectFit: 'contain', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.1))' }} alt={feature.title} />
-                                               )}
-                                           </div>
-                                        )}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '60px', margin: '0 auto', maxWidth: '1000px', padding: '0 20px' }}>
+                       {newFeatures.map((feature, i) => {
+                           const isImageLeft = i % 2 !== 0;
+                           
+                           return (
+                               <div key={i} style={{ 
+                                   display: 'flex', 
+                                   flexDirection: isImageLeft ? 'row-reverse' : 'row', 
+                                   flexWrap: 'wrap',
+                                   alignItems: 'center',
+                                   gap: '40px'
+                               }}>
+                                   <div style={{ flex: '1 1 45%', minWidth: '300px' }}>
+                                       <h3 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '15px', color: '#0ea5e9' }}>
+                                           {feature.title}
+                                       </h3>
+                                       <p style={{ fontSize: '18px', lineHeight: '1.6', color: '#555', whiteSpace: 'pre-wrap' }}>
+                                           {feature.desc}
+                                       </p>
                                    </div>
-                               );
-                           })}
-                        </div>
-
-
-
+                                   
+                                   {(feature.image || feature.images) && (
+                                       <div style={{ flex: '1 1 45%', minWidth: '300px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 15px 35px rgba(0,0,0,0.15)', transition: 'transform 0.3s' }} className="hover:scale-105">
+                                           {feature.images ? (
+                                               <div style={{ display: 'flex', flexDirection: 'row', gap: '10px', justifyContent: 'center' }}>
+                                                   {feature.images.map((img, idx) => (
+                                                       <img 
+                                                           key={idx} 
+                                                           src={img} 
+                                                           style={{ width: 'calc(50% - 5px)', height: 'auto', display: 'block', objectFit: 'contain', borderRadius: '8px' }} 
+                                                           alt={`${feature.title} ${idx+1}`} 
+                                                           loading="lazy" 
+                                                           decoding="async" 
+                                                       />
+                                                   ))}
+                                               </div>
+                                           ) : (
+                                              <img 
+                                                  src={feature.image} 
+                                                  style={{ width: '100%', height: '300px', display: 'block', objectFit: 'contain', filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.1))' }} 
+                                                  alt={feature.title} 
+                                                  loading="lazy" 
+                                                  decoding="async" 
+                                              />
+                                           )}
+                                       </div>
+                                    )}
+                               </div>
+                           );
+                       })}
                     </div>
                 </div>
-            </main>
+            </div>
+        </main>
         
         <section id="footer">
             <div className="inner" style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", justifyContent: "space-between", padding: "0 20px" }}>
