@@ -7,7 +7,7 @@ import SiteHeader from "@/components/SiteHeader";
 export default function WikiPage() {
   const wikiPages = [
     {
-      title: "Bigger Guide",
+      title: "Beginner Guide",
       description: "Complete and comprehensive guide for all server mechanics.",
       path: "/wiki/begginer_guide",
       icon: "fa-book-open",
@@ -21,18 +21,11 @@ export default function WikiPage() {
       color: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
     },
     {
-      title: "Claims & Grief Prevention",
-      description: "Learn how to protect your builds, trust players, and manage your claims.",
+      title: "Protection Stones (Land Claim)",
+      description: "Keep your builds safe from griefing or theft using Protection Stones.",
       path: "/wiki/claims",
       icon: "fa-shield-halved",
       color: "linear-gradient(135deg, #f6d365 0%, #fda085 100%)",
-    },
-    {
-      title: "Plots & Property Guide",
-      description: "Everything you need to know about buying, selling, and managing plots.",
-      path: "/wiki/plots",
-      icon: "fa-house-chimney",
-      color: "linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)",
     },
     {
       title: "FAQs & Issues",
