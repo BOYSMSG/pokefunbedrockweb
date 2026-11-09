@@ -96,13 +96,10 @@ export default function SiteHeader() {
               <a href="/wiki" className={isActive('/wiki') ? "active-pill" : ""}>Wiki & FAQ</a>
               <a href="/team" className={isActive('/team') ? "active-pill" : ""}>Team</a>
               {session ? (
-                <>
-                  <a href="/messages" className={isActive('/messages') ? "active-pill" : ""} style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                    <i className="fa-solid fa-message" style={{ color: '#10B981' }}></i>
-                    <span>Messages</span>
-                  </a>
-                  <a href="/profile" className={isActive('/profile') ? "active-pill" : ""}>Profile</a>
-                </>
+                <a href="/messages" className={isActive('/messages') ? "active-pill" : ""} style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                  <i className="fa-solid fa-message" style={{ color: '#10B981' }}></i>
+                  <span>Messages</span>
+                </a>
               ) : null}
               <a href="https://discord.gg/NtE8QBkmwR" target="_blank" rel="noopener noreferrer">Discord</a>
 
