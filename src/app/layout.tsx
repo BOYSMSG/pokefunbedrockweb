@@ -6,7 +6,6 @@ import { Providers } from '@/components/Providers';
 import { Analytics } from "@vercel/analytics/next";
 import { HALLOWEEN_THEME_ACTIVE } from '@/config/halloween';
 import WelcomeLoginModal from '@/components/WelcomeLoginModal';
-import AuthWidget from '@/components/AuthWidget';
 export const metadata: Metadata = {
   title: 'POKEDROCK SMP POKEFUN - Minecraft Bedrock Pokémon Server',
   description: 'Play the #1 Minecraft Bedrock Pokémon Server. Catch, train, and battle. Free to join!',
@@ -64,7 +63,6 @@ export default function RootLayout({
         <Providers>
           {children}
           <WelcomeLoginModal />
-          <AuthWidget />
         </Providers>
         
         {/* Scripts from the theme */}

@@ -1,12 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
-import { signIn } from "next-auth/react";
+import React, { useState, useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/profile");
+    }
+  }, [status, router]);
+
+  if (status === "authenticated") {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0F172A', color: 'white' }}>
+        <div style={{ textAlign: 'center' }}>
+          <i className="fa-solid fa-circle-check" style={{ fontSize: '3rem', color: '#10B981', marginBottom: '16px' }}></i>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Already logged in!</h2>
+          <p style={{ color: '#94A3B8' }}>Redirecting to your profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleAdminLogin = async (e: React.FormEvent) => {
     e.preventDefault();

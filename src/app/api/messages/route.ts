@@ -1,0 +1,159 @@
+import { NextResponse } from 'next/server';
+import connectDB from '@/lib/mongoose';
+import Message from '@/models/Message';
+import User from '@/models/User';
+import Notification from '@/models/Notification';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { sendPushNotification } from '@/lib/webpush';
+
+export async function GET(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    await connectDB();
+    const myEmail = session.user.email;
+    const me = await User.findOne({ email: myEmail });
+    if (!me) return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    let myUsername = me.username;
+    if (!myUsername) {
+      myUsername = (me.name || myEmail.split('@')[0] || "trainer")
+        .toLowerCase()
+        .replace(/[^a-z0-9_]/g, '');
+      await User.updateOne({ _id: me._id }, { $set: { username: myUsername } });
+    }
+
+    // Fetch all messages where user is sender or receiver
+    const messages = await Message.find({
+      $or: [{ senderId: myUsername }, { receiverId: myUsername }]
+    }).sort({ createdAt: 1 }).lean();
+
+    // Fetch details of all users involved in these messages to show avatars/names
+    const userUsernames = new Set<string>();
+    messages.forEach(msg => {
+      if (msg.senderId !== myUsername) userUsernames.add(msg.senderId);
+      if (msg.receiverId !== myUsername) userUsernames.add(msg.receiverId);
+    });
+
+    const users = await User.find({ username: { $in: Array.from(userUsernames) } }).lean();
+    const userMap: Record<string, any> = {};
+    const threeMinutesAgo = new Date(Date.now() - 3 * 60 * 1000);
+    const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+    
+    users.forEach(u => {
+      let status = 'Offline';
+      if (u.lastActive) {
+        const last = new Date(u.lastActive);
+        if (last > threeMinutesAgo) status = 'Online';
+        else if (last > fifteenMinutesAgo) status = 'Idle';
+      }
+      userMap[u.username] = { 
+        name: u.name, 
+        username: u.username,
+        image: u.image,
+        status 
+      };
+    });
+
+    if (userUsernames.has('Pokefun Bot')) {
+      userMap['Pokefun Bot'] = {
+        name: 'Pokefun Bot',
+        username: 'Pokefun Bot',
+        image: 'https://ui-avatars.com/api/?name=PB&background=ef4444&color=fff',
+        status: 'Online'
+      };
+    }
+
+    return NextResponse.json({ messages, contacts: userMap, myUsername });
+  } catch (error) {
+    console.error("Error fetching messages", error);
+    return NextResponse.json({ error: 'Failed to fetch messages' }, { status: 500 });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    await connectDB();
+    const { receiverId, content } = await req.json();
+
+    if (!receiverId || !content) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    const me = await User.findOne({ email: session.user.email });
+    if (!me) return NextResponse.json({ error: 'User not found' }, { status: 404 });
+
+    let myUsername = me.username;
+    if (!myUsername) {
+      myUsername = (me.name || session.user.email.split('@')[0] || "trainer")
+        .toLowerCase()
+        .replace(/[^a-z0-9_]/g, '');
+      await User.updateOne({ _id: me._id }, { $set: { username: myUsername } });
+    }
+
+    const newMessage = await Message.create({
+      senderId: myUsername,
+      receiverId,
+      content,
+      read: false
+    });
+
+    const receiverUser = await User.findOne({ username: receiverId }).lean();
+
+    if (receiverUser) {
+      const notifTitle = `Message from @${me.username}`;
+      const notifMessage = `"${content.length > 50 ? content.substring(0, 50) + '...' : content}"`;
+      
+      const existingNotif = await Notification.findOne({
+        title: notifTitle,
+        userId: receiverUser.email,
+        isGlobal: false,
+        readBy: { $nin: [receiverUser.email] }
+      });
+
+      if (existingNotif) {
+        existingNotif.message = notifMessage;
+        existingNotif.count = (existingNotif.count || 1) + 1;
+        existingNotif.createdAt = new Date();
+        await existingNotif.save();
+      } else {
+        await Notification.create({
+          title: notifTitle,
+          message: notifMessage,
+          icon: me.image || '/images/default-avatar.png',
+          url: `/messages?user=${encodeURIComponent(me.username)}`,
+          isGlobal: false,
+          userId: receiverUser.email,
+          readBy: [],
+          count: 1
+        });
+      }
+
+      // Send Web Push Notification
+      if (receiverUser.pushSubscriptions && receiverUser.pushSubscriptions.length > 0) {
+        const payload = {
+          title: `New Message from @${me.username}`,
+          message: content,
+          url: `/messages?user=${encodeURIComponent(me.username)}`,
+          icon: me.image || '/images/logo.png'
+        };
+        for (const sub of receiverUser.pushSubscriptions) {
+          await sendPushNotification(sub, payload);
+        }
+      }
+    }
+
+    return NextResponse.json(newMessage);
+  } catch (error) {
+    console.error("Error sending message", error);
+    return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
+  }
+}

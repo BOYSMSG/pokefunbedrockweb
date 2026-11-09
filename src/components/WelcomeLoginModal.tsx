@@ -8,6 +8,12 @@ export default function WelcomeLoginModal() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
+    const handleOpen = () => setShowModal(true);
+    window.addEventListener("openLoginModal", handleOpen);
+    return () => window.removeEventListener("openLoginModal", handleOpen);
+  }, []);
+
+  useEffect(() => {
     // Only show the modal if the user is fully unauthenticated
     // and hasn't previously dismissed it in this browser.
     if (status === "unauthenticated") {

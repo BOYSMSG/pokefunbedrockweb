@@ -15,6 +15,8 @@ const PERMISSIONS_LIST = [
   { id: 'MANAGE_REWARDS_STORE', label: 'Manage Rewards & Store' }
 ];
 
+const ROLES_LIST = ['ALL', 'OWNER', 'ADMIN', 'SUB_ADMIN', 'STAFF', 'USER'];
+
 export default function AdminUsersPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -22,6 +24,9 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedRole, setSelectedRole] = useState('ALL');
+  const [currentPage, setCurrentPage] = useState(1);
+  const USERS_PER_PAGE = 40;
   
   const [editingUser, setEditingUser] = useState<any>(null);
   const [editRole, setEditRole] = useState('');
@@ -30,10 +35,13 @@ export default function AdminUsersPage() {
 
   const myRole = (session?.user as any)?.role;
   const myPermissions = (session?.user as any)?.permissions || [];
-  const canManageRoles = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('MANAGE_ROLES');
+  const userEmail = (session?.user?.email || '').toLowerCase();
+  const userName = ((session?.user as any)?.username || session?.user?.name || '').toLowerCase();
+  const isMasterOwner = ['msgboys832@gmail.com', 'boysmsg832@gmail.com', 'pokefunsmp@gmail.com', 'shifan@pokefun.in', 'shifangouri01@gmail.com'].includes(userEmail) || ['boysmsg01', 'pokefunadmin'].includes(userName);
+  const canManageRoles = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('MANAGE_ROLES') || isMasterOwner;
 
   useEffect(() => {
-    if (status === 'unauthenticated' || !canManageRoles) {
+    if (status === 'unauthenticated' || (!canManageRoles && status !== 'loading')) {
       router.push('/admin');
       return;
     }
@@ -41,7 +49,9 @@ export default function AdminUsersPage() {
     fetch('/api/admin/users')
       .then(res => res.json())
       .then(data => {
-        if (!data.error) setUsers(data);
+        if (!data.error && Array.isArray(data)) {
+          setUsers(data);
+        }
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -85,116 +95,253 @@ export default function AdminUsersPage() {
     setSaving(false);
   };
 
-  const filteredUsers = users.filter(u => 
-    u.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    u.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredUsers = users.filter(u => {
+    const nameMatch = (u.name || '').toLowerCase().includes(searchQuery.toLowerCase());
+    const emailMatch = (u.email || '').toLowerCase().includes(searchQuery.toLowerCase());
+    const userMatch = (u.username || '').toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = nameMatch || emailMatch || userMatch;
+    const matchesRole = selectedRole === 'ALL' || u.role === selectedRole;
+    return matchesSearch && matchesRole;
+  });
 
-  if (loading || status === 'loading') return <div style={{ textAlign: 'center', marginTop: '100px', color: 'white' }}>Loading Users...</div>;
+  const totalPages = Math.ceil(filteredUsers.length / USERS_PER_PAGE) || 1;
+  const paginatedUsers = filteredUsers.slice((currentPage - 1) * USERS_PER_PAGE, currentPage * USERS_PER_PAGE);
+
+  if (loading || status === 'loading') {
+    return (
+      <div style={{ textAlign: 'center', marginTop: '120px', color: 'white' }}>
+        <i className="fa-solid fa-spinner fa-spin" style={{ fontSize: '2.5rem', color: '#10b981', marginBottom: '15px' }}></i>
+        <p style={{ fontSize: '1.2rem', fontWeight: 600 }}>Loading All Players Database...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="inner" style={{ paddingTop: '80px', paddingBottom: '60px', maxWidth: '1000px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '30px' }}>
-        <button onClick={() => router.push('/admin')} style={{ background: 'transparent', border: '1px solid #444', color: 'white', padding: '10px 15px', borderRadius: '8px', cursor: 'pointer' }}>
-          <i className="fa-solid fa-arrow-left"></i> Back
-        </button>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#3b82f6', margin: 0 }}>Manage Staff & Users</h1>
+    <div className="inner" style={{ paddingTop: '80px', paddingBottom: '60px', maxWidth: '1100px', margin: '0 auto', paddingLeft: '20px', paddingRight: '20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '15px', marginBottom: '25px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <button 
+            onClick={() => router.push('/admin')} 
+            style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'white', padding: '10px 18px', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontSize: '0.9rem' }}
+          >
+            <i className="fa-solid fa-arrow-left"></i> Back to Dashboard
+          </button>
+          <div>
+            <h1 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#10b981', margin: 0 }}>All Players & Staff</h1>
+            <p style={{ margin: '4px 0 0', color: '#94a3b8', fontSize: '0.9rem' }}>
+              Connected Database: <strong>{users.length}</strong> total registered players across all networks
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div style={{ marginBottom: '20px' }}>
+      {/* Search & Filters */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '20px' }}>
         <input 
           type="text" 
-          placeholder="Search users by name or email..." 
+          placeholder="Search by name, username, or email..." 
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ width: '100%', padding: '15px 20px', borderRadius: '12px', border: '1px solid #444', background: 'rgba(0,0,0,0.3)', color: 'white', outline: 'none', fontSize: '1rem' }}
+          onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+          style={{ width: '100%', padding: '14px 18px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(0,0,0,0.4)', color: 'white', outline: 'none', fontSize: '0.95rem' }}
         />
+
+        {/* Role Filter Pills */}
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <span style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 700, marginRight: '6px' }}>Filter Role:</span>
+          {ROLES_LIST.map(role => (
+            <button
+              key={role}
+              onClick={() => { setSelectedRole(role); setCurrentPage(1); }}
+              style={{
+                background: selectedRole === role ? '#10b981' : 'rgba(255,255,255,0.07)',
+                color: selectedRole === role ? '#ffffff' : '#cbd5e1',
+                border: '1px solid rgba(255,255,255,0.1)',
+                padding: '6px 14px',
+                borderRadius: '8px',
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                transition: '0.2s'
+              }}
+            >
+              {role} {role === 'ALL' ? `(${users.length})` : `(${users.filter(u => u.role === role).length})`}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '16px', border: '1px solid #444', overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', color: 'white', minWidth: '600px' }}>
-          <thead style={{ background: 'rgba(0,0,0,0.5)' }}>
+      {/* Users Table */}
+      <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', overflowX: 'auto', boxShadow: '0 8px 30px rgba(0,0,0,0.3)' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', color: 'white', minWidth: '700px' }}>
+          <thead style={{ background: 'rgba(0,0,0,0.4)', borderBottom: '1.5px solid rgba(255,255,255,0.1)' }}>
             <tr>
-              <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #444' }}>Avatar</th>
-              <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #444' }}>Name</th>
-              <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #444' }}>Email</th>
-              <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #444' }}>Role</th>
-              <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #444' }}>Joined</th>
+              <th style={{ padding: '14px 16px', textAlign: 'left', fontSize: '0.82rem', color: '#94a3b8', textTransform: 'uppercase' }}>Player</th>
+              <th style={{ padding: '14px 16px', textAlign: 'left', fontSize: '0.82rem', color: '#94a3b8', textTransform: 'uppercase' }}>Email</th>
+              <th style={{ padding: '14px 16px', textAlign: 'left', fontSize: '0.82rem', color: '#94a3b8', textTransform: 'uppercase' }}>Role</th>
+              <th style={{ padding: '14px 16px', textAlign: 'left', fontSize: '0.82rem', color: '#94a3b8', textTransform: 'uppercase' }}>Joined</th>
+              <th style={{ padding: '14px 16px', textAlign: 'right', fontSize: '0.82rem', color: '#94a3b8', textTransform: 'uppercase' }}>Action</th>
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map(u => (
-              <tr key={u._id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                <td style={{ padding: '15px' }}>
-                  <img src={u.image || `https://ui-avatars.com/api/?name=${u.name}&background=random`} alt={u.name} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
+            {paginatedUsers.length === 0 ? (
+              <tr>
+                <td colSpan={5} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
+                  No players found matching your search.
                 </td>
-                <td style={{ padding: '15px', fontWeight: 'bold' }}>{u.name}</td>
-                <td style={{ padding: '15px', color: 'gray' }}>{u.email}</td>
-                <td style={{ padding: '15px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ 
-                      padding: '4px 8px', 
-                      borderRadius: '4px', 
-                      background: u.role === 'OWNER' ? '#ff4757' : u.role === 'ADMIN' ? '#3b82f6' : u.role === 'SUB_ADMIN' ? '#10b981' : u.role === 'STAFF' ? '#8b5cf6' : 'rgba(255,255,255,0.1)',
-                      fontSize: '0.8rem',
-                      fontWeight: 'bold'
-                    }}>{u.role}</span>
-                    <button 
-                      onClick={() => openEditModal(u)}
-                      style={{ padding: '6px 12px', background: '#374151', color: 'white', border: '1px solid #4b5563', borderRadius: '6px', fontSize: '0.8rem', cursor: 'pointer' }}
-                    >
-                      <i className="fa-solid fa-pen"></i> Edit
-                    </button>
-                  </div>
-                </td>
-                <td style={{ padding: '15px', color: 'gray' }}>{new Date(u.createdAt).toLocaleDateString()}</td>
               </tr>
-            ))}
+            ) : (
+              paginatedUsers.map(u => (
+                <tr key={u._id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', transition: 'background 0.15s' }}>
+                  <td style={{ padding: '12px 16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <img 
+                        src={u.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name || 'Trainer')}&background=random`} 
+                        alt={u.name} 
+                        style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid rgba(255,255,255,0.1)' }} 
+                      />
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: '0.92rem', color: 'white' }}>{u.name || 'Trainer'}</div>
+                        <div style={{ fontSize: '0.78rem', color: '#10b981', fontWeight: 600 }}>@{u.username || 'trainer'}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style={{ padding: '12px 16px', color: '#94a3b8', fontSize: '0.85rem' }}>{u.email}</td>
+                  <td style={{ padding: '12px 16px' }}>
+                    <span style={{ 
+                      padding: '4px 10px', 
+                      borderRadius: '6px', 
+                      background: u.role === 'OWNER' ? '#ef4444' : u.role === 'ADMIN' ? '#3b82f6' : u.role === 'SUB_ADMIN' ? '#10b981' : u.role === 'STAFF' ? '#8b5cf6' : 'rgba(255,255,255,0.1)',
+                      fontSize: '0.78rem',
+                      fontWeight: 800,
+                      letterSpacing: '0.5px'
+                    }}>
+                      {u.role}
+                    </span>
+                  </td>
+                  <td style={{ padding: '12px 16px', color: '#64748b', fontSize: '0.82rem' }}>
+                    {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'N/A'}
+                  </td>
+                  <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                    <div style={{ display: 'inline-flex', gap: '8px' }}>
+                      <a 
+                        href={`/messages?user=${encodeURIComponent(u.username || u.name)}`}
+                        style={{ padding: '6px 12px', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: '8px', fontSize: '0.8rem', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px' }}
+                      >
+                        <i className="fa-solid fa-message"></i> DM
+                      </a>
+                      <button 
+                        onClick={() => openEditModal(u)}
+                        style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}
+                      >
+                        <i className="fa-solid fa-pen"></i> Role
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
+
+        {/* Pagination Bar */}
+        {totalPages > 1 && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.2)' }}>
+            <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
+              Showing {((currentPage - 1) * USERS_PER_PAGE) + 1} - {Math.min(currentPage * USERS_PER_PAGE, filteredUsers.length)} of {filteredUsers.length} players
+            </span>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                style={{
+                  background: currentPage === 1 ? 'transparent' : 'rgba(255,255,255,0.1)',
+                  color: currentPage === 1 ? '#475569' : 'white',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  padding: '6px 14px',
+                  borderRadius: '6px',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: currentPage === 1 ? 'not-allowed' : 'pointer'
+                }}
+              >
+                Previous
+              </button>
+              <span style={{ color: '#10b981', fontWeight: 800, fontSize: '0.88rem', padding: '0 8px' }}>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                style={{
+                  background: currentPage === totalPages ? 'transparent' : 'rgba(255,255,255,0.1)',
+                  color: currentPage === totalPages ? '#475569' : 'white',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  padding: '6px 14px',
+                  borderRadius: '6px',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: currentPage === totalPages ? 'not-allowed' : 'pointer'
+                }}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
+      {/* Edit Role Modal */}
       {editingUser && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-          <div style={{ background: '#1f2937', padding: '30px', borderRadius: '16px', width: '100%', maxWidth: '500px', border: '1px solid #374151', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h2 style={{ color: 'white', marginBottom: '20px', fontSize: '1.5rem' }}>Edit Staff: {editingUser.name}</h2>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(5px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 99999 }}>
+          <div style={{ background: '#1e293b', padding: '30px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', width: '90%', maxWidth: '500px', boxShadow: '0 20px 40px rgba(0,0,0,0.6)' }}>
+            <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'white', margin: '0 0 15px' }}>
+              Edit Role & Permissions: {editingUser.name}
+            </h3>
             
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', color: 'gray', marginBottom: '10px', fontWeight: 'bold' }}>Select Role</label>
+              <label style={{ display: 'block', color: '#94a3b8', fontSize: '0.85rem', marginBottom: '8px', fontWeight: 700 }}>Role:</label>
               <select 
                 value={editRole} 
-                onChange={e => setEditRole(e.target.value)}
-                style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.3)', border: '1px solid #444', borderRadius: '8px', color: 'white', outline: 'none' }}
+                onChange={(e) => setEditRole(e.target.value)}
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)', background: '#0f172a', color: 'white', fontWeight: 700 }}
               >
                 <option value="USER">USER</option>
                 <option value="STAFF">STAFF</option>
                 <option value="SUB_ADMIN">SUB_ADMIN</option>
                 <option value="ADMIN">ADMIN</option>
-                {myRole === 'OWNER' && <option value="OWNER">OWNER</option>}
+                <option value="OWNER">OWNER</option>
               </select>
             </div>
 
-            <div style={{ marginBottom: '30px' }}>
-              <label style={{ display: 'block', color: 'gray', marginBottom: '15px', fontWeight: 'bold' }}>Specific Permissions</label>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {PERMISSIONS_LIST.map(perm => (
-                  <label key={perm.id} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'white', cursor: 'pointer' }}>
+            <div style={{ marginBottom: '25px' }}>
+              <label style={{ display: 'block', color: '#94a3b8', fontSize: '0.85rem', marginBottom: '8px', fontWeight: 700 }}>Custom Staff Permissions:</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '180px', overflowY: 'auto' }}>
+                {PERMISSIONS_LIST.map(p => (
+                  <label key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'white', fontSize: '0.85rem', cursor: 'pointer' }}>
                     <input 
                       type="checkbox" 
-                      checked={editPermissions.includes(perm.id)}
-                      onChange={() => togglePermission(perm.id)}
-                      style={{ width: '18px', height: '18px', accentColor: '#3b82f6' }}
+                      checked={editPermissions.includes(p.id)} 
+                      onChange={() => togglePermission(p.id)}
                     />
-                    {perm.label}
+                    {p.label}
                   </label>
                 ))}
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '15px' }}>
-              <button onClick={() => setEditingUser(null)} style={{ flex: 1, padding: '12px', background: 'transparent', border: '1px solid #4b5563', color: 'white', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
-              <button onClick={handleSave} disabled={saving} style={{ flex: 1, padding: '12px', background: '#3b82f6', border: 'none', color: 'white', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', opacity: saving ? 0.7 : 1 }}>
-                {saving ? "Saving..." : "Save Changes"}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <button 
+                onClick={() => setEditingUser(null)}
+                style={{ padding: '10px 18px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '8px', cursor: 'pointer', fontWeight: 700 }}
+              >
+                Cancel
+              </button>
+              <button 
+                disabled={saving}
+                onClick={handleSave}
+                style={{ padding: '10px 20px', background: '#10b981', border: 'none', color: 'white', borderRadius: '8px', cursor: 'pointer', fontWeight: 800 }}
+              >
+                {saving ? 'Saving...' : 'Save Permissions'}
               </button>
             </div>
           </div>

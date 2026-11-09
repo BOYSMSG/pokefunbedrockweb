@@ -16,14 +16,17 @@ export default function AdminPage() {
 
   const myRole = (session?.user as any)?.role;
   const myPermissions = (session?.user as any)?.permissions || [];
+  const userEmail = (session?.user?.email || '').toLowerCase();
+  const userName = ((session?.user as any)?.username || session?.user?.name || '').toLowerCase();
+  const isMasterOwner = ['msgboys832@gmail.com', 'boysmsg832@gmail.com', 'pokefunsmp@gmail.com', 'shifan@pokefun.in', 'shifangouri01@gmail.com'].includes(userEmail) || ['boysmsg01', 'pokefunadmin'].includes(userName);
   
-  const isPrivileged = myRole === 'OWNER' || myRole === 'ADMIN' || myRole === 'SUB_ADMIN' || myRole === 'STAFF' || myPermissions.length > 0;
-  const canManageRoles = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('MANAGE_ROLES');
-  const canBanUsers = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('BAN_USERS');
-  const canReadDMs = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('READ_DMS');
-  const canManageGiveawaysPolls = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('MANAGE_GIVEAWAYS_POLLS');
-  const canManageEventsTourneys = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('MANAGE_EVENTS_TOURNAMENTS');
-  const canManageRewardsStore = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('MANAGE_REWARDS_STORE');
+  const isPrivileged = myRole === 'OWNER' || myRole === 'ADMIN' || myRole === 'SUB_ADMIN' || myRole === 'STAFF' || myPermissions.length > 0 || isMasterOwner;
+  const canManageRoles = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('MANAGE_ROLES') || isMasterOwner;
+  const canBanUsers = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('BAN_USERS') || isMasterOwner;
+  const canReadDMs = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('READ_DMS') || isMasterOwner;
+  const canManageGiveawaysPolls = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('MANAGE_GIVEAWAYS_POLLS') || isMasterOwner;
+  const canManageEventsTourneys = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('MANAGE_EVENTS_TOURNAMENTS') || isMasterOwner;
+  const canManageRewardsStore = myRole === 'OWNER' || myRole === 'ADMIN' || myPermissions.includes('MANAGE_REWARDS_STORE') || isMasterOwner;
 
   // Auto redirect if not privileged but logged in
   useEffect(() => {
