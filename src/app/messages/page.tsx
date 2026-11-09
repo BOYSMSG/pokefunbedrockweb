@@ -12,6 +12,7 @@ export default function MessagesPage() {
   const [contacts, setContacts] = useState<Record<string, any>>({});
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<'RECENT' | 'ALL'>('RECENT');
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [myUsername, setMyUsername] = useState<string>("");
   
   const [activeContact, setActiveContact] = useState<string | null>(null);
@@ -138,6 +139,14 @@ export default function MessagesPage() {
 
   if (loading || status === 'loading') return <div style={{ textAlign: 'center', marginTop: '100px', color: 'gray' }}>Loading Messages...</div>;
 
+  const getContactInfo = (username: string) => {
+    if (username === 'pokefun_actions') return { name: 'Pokefun Actions', username: 'system', image: 'https://ui-avatars.com/api/?name=PA&background=eab308&color=000', status: 'Online' };
+    if (contacts[username]) return contacts[username];
+    const found = allUsers.find(u => u.username === username || u.name === username || u.email === username);
+    if (found) return found;
+    return { name: username, username, image: null, status: 'Offline' };
+  };
+
   const contactUsernames = Object.keys(contacts);
   
   const getLatestMessageTime = (username: string) => {
@@ -147,16 +156,33 @@ export default function MessagesPage() {
     return new Date(latest.createdAt).getTime();
   };
 
-  const recentContactsSorted = [...contactUsernames].sort((a, b) => getLatestMessageTime(b) - getLatestMessageTime(a));
+  const recentContactsSorted = [...contactUsernames].sort((a, b) => {
+    const infoA = getContactInfo(a);
+    const infoB = getContactInfo(b);
+    const valA = infoA.status === 'Online' ? 2 : (infoA.status === 'Idle' ? 1 : 0);
+    const valB = infoB.status === 'Online' ? 2 : (infoB.status === 'Idle' ? 1 : 0);
+    if (valB !== valA) return valB - valA;
+    return getLatestMessageTime(b) - getLatestMessageTime(a);
+  });
   
   // Sort all users so online users are at the top, then idle, then offline
   const sortedAllUsers = [...allUsers].sort((a, b) => {
     const valA = a.status === 'Online' ? 2 : (a.status === 'Idle' ? 1 : 0);
     const valB = b.status === 'Online' ? 2 : (b.status === 'Idle' ? 1 : 0);
-    return valB - valA;
+    if (valB !== valA) return valB - valA;
+    return (a.name || a.username || '').localeCompare(b.name || b.username || '');
   });
   
-  const displayList = activeTab === 'RECENT' ? recentContactsSorted : sortedAllUsers.map(u => u.username || u.email);
+  const rawDisplayList = activeTab === 'RECENT' ? recentContactsSorted : sortedAllUsers.map(u => u.username || u.name || u.email);
+  const displayList = rawDisplayList.filter(username => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase().trim();
+    const info = getContactInfo(username);
+    const uMatch = (username || '').toLowerCase().includes(q);
+    const nMatch = (info?.name || '').toLowerCase().includes(q);
+    const infoUserMatch = (info?.username || '').toLowerCase().includes(q);
+    return uMatch || nMatch || infoUserMatch;
+  });
 
   const activeChat = messages.filter(m => 
     (m.senderId === myUsername && m.receiverId === activeContact) ||
@@ -169,14 +195,6 @@ export default function MessagesPage() {
       unreadCounts[m.senderId] = (unreadCounts[m.senderId] || 0) + 1;
     }
   });
-
-  const getContactInfo = (username: string) => {
-    if (username === 'pokefun_actions') return { name: 'Pokefun Actions', username: 'system', image: 'https://ui-avatars.com/api/?name=PA&background=eab308&color=000' };
-    if (contacts[username]) return contacts[username];
-    const found = allUsers.find(u => u.username === username || u.email === username);
-    if (found) return found;
-    return { name: username, username, image: null };
-  };
 
   const activeContactInfo = activeContact ? getContactInfo(activeContact) : null;
 
@@ -242,7 +260,9 @@ export default function MessagesPage() {
           <div style={{ padding: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
             <input 
               type="text" 
-              placeholder="Search..." 
+              placeholder="Search players by name..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               style={{ width: '100%', padding: '10px 15px', borderRadius: '30px', border: 'none', background: 'rgba(255,255,255,0.1)', color: 'white', outline: 'none' }}
             />
           </div>

@@ -13,6 +13,9 @@ export async function GET() {
 
     await connectDB();
     
+    // Update calling user's lastActive so they appear Online
+    User.updateOne({ email: session.user.email }, { $set: { lastActive: new Date() } }).exec().catch(() => {});
+
     // Fetch all users except the current logged-in user
     const users = await User.find({ email: { $ne: session.user.email } })
       .select('name username image role discordId lastActive')
@@ -36,6 +39,14 @@ export async function GET() {
         discordId: u.discordId,
         status
       };
+    });
+
+    // Always sort so Online users are at the top, then Idle, then Offline
+    formattedUsers.sort((a, b) => {
+      const valA = a.status === 'Online' ? 2 : (a.status === 'Idle' ? 1 : 0);
+      const valB = b.status === 'Online' ? 2 : (b.status === 'Idle' ? 1 : 0);
+      if (valB !== valA) return valB - valA;
+      return (a.name || a.username || '').localeCompare(b.name || b.username || '');
     });
 
     return NextResponse.json({ users: formattedUsers });
