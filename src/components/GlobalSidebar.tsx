@@ -32,7 +32,7 @@ export default function GlobalSidebar() {
     { title: "Rules", path: "/rules" },
     { title: "Staff Team", path: "/team" },
     { title: "Changelogs", path: "/changelogs" },
-    { title: "Discord", path: "https://discord.com/invite/NtE8QBkmwR", external: true },
+    { title: "Discord", path: "https://discord.gg/NtE8QBkmwR", external: true },
   ];
 
   const otherLinks = [

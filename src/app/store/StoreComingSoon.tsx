@@ -24,7 +24,7 @@ export default function StoreComingSoon() {
                     <a href="/store" className="active-pill">Shop</a>
                     <a href="/showcase">Showcase</a>
                     <a href="/team">Team</a>
-                    <a href="https://discord.gg/9AU3kHZZDT" target="_blank" rel="noopener noreferrer">Discord</a>
+                    <a href="https://discord.gg/NtE8QBkmwR" target="_blank" rel="noopener noreferrer">Discord</a>
                 </div>
             </div>
             <div className="header-bg" style={{ height: '350px' }}></div>

@@ -10,7 +10,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <SessionProvider>
       <LanguageProvider>
         {children}
-        <LanguageSettings />
+        {/* <LanguageSettings /> */}
         <HalloweenTheme />
       </LanguageProvider>
     </SessionProvider>

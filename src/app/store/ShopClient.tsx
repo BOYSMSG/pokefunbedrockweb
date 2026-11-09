@@ -617,7 +617,7 @@ export default function ShopClient({ initialCategories }: { initialCategories: a
                 <p>Having an issue with your purchase?<br/>If your package has not been delivered after 20 minutes, please contact our staff through Discord and provide proof of purchase.<br/>For payment issues, missing purchases, or other store-related problems, please open a support ticket on our Discord server.</p>
                 
                 <p><strong>💬 Join Our Discord</strong><br/>Need help, want to report an issue, or simply want to meet the community?<br/>Join our official Discord server and talk with the Pokedrock SMP community and staff.<br/>
-                Discord: <a href="https://discord.com/invite/NtE8QBkmwR" target="_blank" style={{color: '#4bc8c8'}}>https://discord.com/invite/NtE8QBkmwR</a></p>
+                Discord: <a href="https://discord.gg/NtE8QBkmwR" target="_blank" style={{color: '#4bc8c8'}}>https://discord.gg/NtE8QBkmwR</a></p>
 
                 <p><strong>📧 CONTACT</strong><br/>For general questions and support:<br/>Email: <a href="mailto:contact@pokefun.in" style={{color: '#4bc8c8'}}>contact@pokefun.in</a><br/>For purchase-related issues, we recommend opening a ticket on our Discord server so our staff can assist you faster.</p>
 

@@ -207,7 +207,7 @@ export default function HomeClient() {
                             </p>
                             <p style={{ color: '#555', lineHeight: '1.8', marginBottom: '20px' }}>
                                 Our meticulous craftsmanship and unwavering commitment have amazed over 1000+ players and brought them enjoyment, adventures, and more.
-                                In a world where our players are at the forefront of our goals, we make sure everyone is happy, and having fun. If you have a problem, need to report a player, or have a suggestion make sure to join our <a href="https://discord.gg/9AU3kHZZDT" style={{ color: '#0ea5e9', textDecoration: 'underline' }}>discord</a>.
+                                In a world where our players are at the forefront of our goals, we make sure everyone is happy, and having fun. If you have a problem, need to report a player, or have a suggestion make sure to join our <a href="https://discord.gg/NtE8QBkmwR" style={{ color: '#0ea5e9', textDecoration: 'underline' }}>discord</a>.
                             </p>
                         </div>
                     </div>
@@ -337,7 +337,7 @@ export default function HomeClient() {
                                 #pokedrocksmp
                             </h2>
                             <p style={{ color: '#555', fontSize: '16px' }}>
-                                Check out some amazing content posted for Pokedrocksmp. <a href="https://discord.gg/9AU3kHZZDT" target="_blank" rel="noreferrer" style={{ color: '#0ea5e9', textDecoration: 'underline' }}>Contact for add yours</a>
+                                Check out some amazing content posted for Pokedrocksmp. <a href="https://discord.gg/NtE8QBkmwR" target="_blank" rel="noreferrer" style={{ color: '#0ea5e9', textDecoration: 'underline' }}>Contact for add yours</a>
                             </p>
                         </div>
                         

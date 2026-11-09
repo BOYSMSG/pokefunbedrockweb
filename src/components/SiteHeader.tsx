@@ -92,7 +92,8 @@ export default function SiteHeader() {
               <a href="/showcase" className={isActive('/showcase') ? "active-pill" : ""}>Showcase</a>
               <a href="/wiki" className={isActive('/wiki') ? "active-pill" : ""}>Wiki & FAQ</a>
               <a href="/team" className={isActive('/team') ? "active-pill" : ""}>Team</a>
-              <a href="https://discord.gg/9AU3kHZZDT" target="_blank" rel="noopener noreferrer">Discord</a>
+              <a href="/login" className={isActive('/login') ? "active-pill" : ""}>Login</a>
+              <a href="https://discord.gg/NtE8QBkmwR" target="_blank" rel="noopener noreferrer">Discord</a>
           </div>
       </div>
       <div className="header-bg"></div>
@@ -113,6 +114,7 @@ export default function SiteHeader() {
                       <li className={`nav-showcase ${isActive('/showcase') ? 'nav-current' : ''}`}><a href="/showcase">Showcase</a></li>
                       <li className={`nav-wiki ${isActive('/wiki') ? 'nav-current' : ''}`}><a href="/wiki">Wiki & FAQ</a></li>
                       <li className={`nav-team ${isActive('/team') ? 'nav-current' : ''}`}><a href="/team">Team</a></li>
+                      <li className={`nav-login ${isActive('/login') ? 'nav-current' : ''}`}><a href="/login">Login</a></li>
                   </ul>
               </div>
           </nav>
@@ -177,7 +179,62 @@ export default function SiteHeader() {
         .custom-shape-divider-bottom-1675067978.custom-shadow path {
             fill: #f8fafc !important;
         }
+        .gh-burger {
+            width: 44px !important;
+            height: 44px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: rgba(255, 255, 255, 0.15) !important;
+            border-radius: 12px !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            transition: all 0.2s ease !important;
+        }
+        .gh-burger:active {
+            transform: scale(0.92) !important;
+        }
+        .gh-burger-box {
+            width: 24px !important;
+            height: 24px !important;
+        }
+        .gh-burger-box:before,
+        .gh-burger-inner:after,
+        .gh-burger-inner:before {
+            height: 2.5px !important;
+            background: #ffffff !important;
+            border-radius: 2px !important;
+        }
         @media (max-width: 900px) {
+            #gh-head .gh-head-menu {
+                padding: 40px 20px !important;
+            }
+            #gh-head .gh-head-menu .nav {
+                width: 100% !important;
+                max-width: 380px !important;
+                gap: 12px !important;
+            }
+            #gh-head .gh-head-menu .nav li {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+            #gh-head .gh-head-menu .nav a {
+                display: block !important;
+                padding: 14px 20px !important;
+                font-size: 1.25rem !important;
+                font-weight: 700 !important;
+                border-radius: 14px !important;
+                background: rgba(255, 255, 255, 0.08) !important;
+                border: 1px solid rgba(255, 255, 255, 0.15) !important;
+                color: #ffffff !important;
+                text-align: center !important;
+                transition: all 0.2s ease !important;
+            }
+            #gh-head .gh-head-menu .nav li.nav-current a,
+            #gh-head .gh-head-menu .nav a:hover {
+                background: linear-gradient(135deg, #ff6b08, #8e44ad) !important;
+                border-color: rgba(255, 175, 64, 0.5) !important;
+                box-shadow: 0 4px 15px rgba(255, 107, 8, 0.4) !important;
+            }
             .custom-header-inner {
                 flex-wrap: wrap;
                 gap: 20px;
@@ -216,7 +273,7 @@ export default function SiteHeader() {
                   <div className="circle"></div>
               </div>
           </div>
-          <a id="discord" target="_blank" href="https://discord.gg/9AU3kHZZDT" className="custom-info-card" rel="noreferrer">
+          <a id="discord" target="_blank" href="https://discord.gg/NtE8QBkmwR" className="custom-info-card" rel="noreferrer">
               <i className="fa-brands fa-discord" style={{ fontSize: '32px' }}></i>
               <div className="info-text" style={{ textAlign: 'center' }}>
                   <div className="if-large">DISCORD <span className="count">JOIN</span></div>
